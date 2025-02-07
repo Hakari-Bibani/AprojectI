@@ -1,107 +1,90 @@
-
 import streamlit as st
-from theme import apply_dark_theme
-from database import create_tables
-from login import show_login_create_account
-from sidebar import show_sidebar
-from home import show_home
+import sqlite3
 
-def main():
-    # Must be the FIRST Streamlit command
-    st.set_page_config(page_title="Code for Impact", layout="wide")
+# --- Database Helper Functions ---
+def get_db_connection():
+    # Connect to the same SQLite database created by database.py
+    return sqlite3.connect('mydatabase.db')
 
-    # Apply dark theme
-    apply_dark_theme()
+def insert_user(fullname, email, phone, username, password, approved, as1, as2, as3, as4, quiz1, quiz2):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    insert_query = '''
+    INSERT INTO users (fullname, email, phone, username, password, approved, as1, as2, as3, as4, quiz1, quiz2)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    '''
+    cursor.execute(insert_query, (fullname, email, phone, username, password, approved, as1, as2, as3, as4, quiz1, quiz2))
+    conn.commit()
+    conn.close()
+
+def fetch_users():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users")
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
+
+# --- Module to Handle Assignments and Quizzes ---
+def handle_modules():
+    st.header("Handle Modules")
+    st.write("Enter and calculate assignment and quiz scores separately.")
+
+    # Input fields for assignments
+    as1 = st.number_input("Assignment 1 Score", min_value=0.0, step=0.1, key="as1_module")
+    as2 = st.number_input("Assignment 2 Score", min_value=0.0, step=0.1, key="as2_module")
+    as3 = st.number_input("Assignment 3 Score", min_value=0.0, step=0.1, key="as3_module")
+    as4 = st.number_input("Assignment 4 Score", min_value=0.0, step=0.1, key="as4_module")
     
-    # Ensure tables exist (and DB is pulled from GitHub if you're doing that in create_tables)
-    create_tables()
+    # Input fields for quizzes
+    quiz1 = st.number_input("Quiz 1 Score", min_value=0.0, step=0.1, key="quiz1_module")
+    quiz2 = st.number_input("Quiz 2 Score", min_value=0.0, step=0.1, key="quiz2_module")
+    
+    if st.button("Calculate Total"):
+        total = as1 + as2 + as3 + as4 + quiz1 + quiz2
+        st.success(f"Total Score: {total}")
 
-    # Track login state
-    if "logged_in" not in st.session_state:
-        st.session_state["logged_in"] = False
+    st.info("Use these scores later when adding a user or updating records.")
 
-    if st.session_state["logged_in"]:
-        # Use your sidebar to get the chosen page
-        selected = show_sidebar()
+# --- Main App ---
+def main():
+    st.title("Streamlit Web App with Modular Assignment/Quiz Handling")
+    
+    # Sidebar Menu for Navigation
+    menu = st.sidebar.selectbox("Menu", ["Home", "Handle Modules", "View Users"])
+    
+    if menu == "Home":
+        st.header("Home - Enter User Information")
+        # User information fields
+        fullname = st.text_input("Full Name")
+        email = st.text_input("Email")
+        phone = st.text_input("Phone")
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        approved = st.checkbox("Approved")
 
-        if selected == "logout":
-            st.session_state["logged_in"] = False
-            st.rerun()
+        # If you want, you can include assignment and quiz fields here too;
+        # however, they can also be handled solely in the Handle Modules section.
+        st.subheader("Enter Scores (if not using Handle Modules)")
+        as1 = st.number_input("Assignment 1 Score", min_value=0.0, step=0.1, key="as1_home")
+        as2 = st.number_input("Assignment 2 Score", min_value=0.0, step=0.1, key="as2_home")
+        as3 = st.number_input("Assignment 3 Score", min_value=0.0, step=0.1, key="as3_home")
+        as4 = st.number_input("Assignment 4 Score", min_value=0.0, step=0.1, key="as4_home")
+        quiz1 = st.number_input("Quiz 1 Score", min_value=0.0, step=0.1, key="quiz1_home")
+        quiz2 = st.number_input("Quiz 2 Score", min_value=0.0, step=0.1, key="quiz2_home")
 
-        elif selected == "home":
-            show_home()
+        if st.button("Submit User Data"):
+            # Convert the approved checkbox to an integer (1 if True, 0 if False)
+            insert_user(fullname, email, phone, username, password, int(approved), as1, as2, as3, as4, quiz1, quiz2)
+            st.success("User data inserted successfully!")
 
-        # ─────────────────────────────────────────────────────────────────
-        # Handle Assignments
-        # ─────────────────────────────────────────────────────────────────
-        elif selected == "as1":
-            import as1
-            as1.show()
-
-        elif selected == "as2":
-            import as2
-            as2.show()
-
-        elif selected == "as3":
-            import as3
-            as3.show()
-
-        elif selected == "as4":
-            import as4
-            as4.show()
-
-        # ─────────────────────────────────────────────────────────────────
-        # Handle Quizzes
-        # ─────────────────────────────────────────────────────────────────
-        elif selected == "quiz1":
-            import quiz1
-            quiz1.show()
-
-        elif selected == "quiz2":
-            import quiz2
-            quiz2.show()
-
-        # ─────────────────────────────────────────────────────────────────
-        # Handle Help (if you have a help.py module)
-        # ─────────────────────────────────────────────────────────────────
-        elif selected == "help":
-            import help
-            help.show()
-
-        # ─────────────────────────────────────────────────────────────────
-        # Handle Modules
-        # ─────────────────────────────────────────────────────────────────
-        elif selected == "modules_intro":
-            import modules_intro
-            modules_intro.show()
-
-        elif selected == "modules_week1":
-            import modules_week1
-            modules_week1.show()
-
-        elif selected == "modules_week2":
-            import modules_week2
-            modules_week2.show()
-
-        elif selected == "modules_week3":
-            import modules_week3
-            modules_week3.show()
-
-        elif selected == "modules_week4":
-            import modules_week4
-            modules_week4.show()
-
-        elif selected == "modules_week5":
-            import modules_week5
-            modules_week5.show()
-
-        else:
-            st.warning("Unknown selection.")
-
-    else:
-        # If not logged in, show login/create account pages
-        show_login_create_account()
+    elif menu == "Handle Modules":
+        handle_modules()
+        
+    elif menu == "View Users":
+        st.header("View User Records")
+        users = fetch_users()
+        st.write(users)
 
 if __name__ == "__main__":
     main()
-
