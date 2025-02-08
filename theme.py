@@ -30,7 +30,7 @@ def apply_dark_theme():
 
         /* Hover effect on buttons */
         .stButton > button:hover {
-            background-color: #B0E0E6 !important;  /* Soft blue */
+            background-color: #d3d3d3 !important;  /* Light gray */
             color: black !important;
             transition: 0.3s ease-in-out;
         }
@@ -46,7 +46,7 @@ def apply_dark_theme():
         }
 
         div[data-testid="stTabs"] button[aria-selected="true"] {
-            background-color: #B0E0E6 !important;  /* Soft blue when selected */
+            background-color: #d3d3d3 !important;  /* Light gray when selected */
             color: black !important;
         }
         
@@ -76,7 +76,7 @@ def apply_dark_theme():
         
         /* Sidebar menu hover effect */
         .css-1d391kg:hover, .css-18e3th9:hover {
-            background-color: #B0E0E6 !important;  /* Soft blue */
+            background-color: #d3d3d3 !important;  /* Light gray */
             color: black !important;
             border-radius: 8px;
             transition: 0.3s ease-in-out;
