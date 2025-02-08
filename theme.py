@@ -11,13 +11,11 @@ def apply_dark_theme():
             background-color: #000000 !important;
             color: #ffffff !important;
         }
-
         /* Set input labels to orange and bold */
         .stTextInput > label, .stSelectbox > label, .stButton > button {
             color: #FFA500 !important;  /* Orange */
             font-weight: bold;
         }
-
         /* Text Input Box and Button Styling */
         .stTextInput, .stSelectbox, .stButton > button {
             background-color: #000000 !important;  /* Black */
@@ -27,14 +25,12 @@ def apply_dark_theme():
             padding: 10px;
             box-shadow: 0px 0px 5px rgba(128, 128, 128, 0.5); /* Grey glow */
         }
-
         /* Hover effect on buttons */
         .stButton > button:hover {
             background-color: #d3d3d3 !important;  /* Light gray */
             color: black !important;
             transition: 0.3s ease-in-out;
         }
-
         /* Styling for login and create account tabs */
         div[data-testid="stTabs"] {
             display: flex;
@@ -46,9 +42,9 @@ def apply_dark_theme():
             font-weight: bold !important;
             color: white !important;
             background-color: #000000 !important;
+            border: 2px solid #808080 !important;  /* Grey border */
             border: 1px solid #808080 !important;  /* Changed from 2px to 1px */
         }
-
         div[data-testid="stTabs"] button[aria-selected="true"] {
             background-color: #d3d3d3 !important;  /* Light gray when selected */
             color: black !important;
@@ -61,14 +57,12 @@ def apply_dark_theme():
             font-size: 16px !important;
             padding: 5px;
         }
-
         /* Sidebar Styling */
         [data-testid="stSidebar"], .sidebar-content {
             background-color: #000000 !important;  /* Black */
             color: #ffffff !important;
             border-right: 1px solid #808080 !important;  /* Grey border */
         }
-
         [data-testid="stSidebar"] div {
             color: white !important;
         }
@@ -85,7 +79,6 @@ def apply_dark_theme():
             border-radius: 8px;
             transition: 0.3s ease-in-out;
         }
-
         /* Scrollbar Customization */
         ::-webkit-scrollbar {
             width: 8px;
