@@ -1,3 +1,4 @@
+
 ''' theme.py - Manages dark mode theme for the entire app, including sidebar '''
 import streamlit as st
 
@@ -14,7 +15,7 @@ def apply_dark_theme():
 
         /* Set input labels to green */
         .stTextInput > label, .stSelectbox > label, .stButton > button {
-            color: #808080 !important;  /* Light Grey */
+            color: #32CD32 !important;  /* Light Green */
             font-weight: bold;
         }
 
@@ -23,14 +24,14 @@ def apply_dark_theme():
             background-color: #1e1e1e !important;
             color: white !important;
             border-radius: 8px !important;  /* Rounded corners */
-            border: 1px solid #808080 !important; /* Grey border */
+            border: 1px solid #32CD32 !important; /* Green border */
             padding: 10px;
-            box-shadow: 0px 0px 5px rgba(128, 128, 128, 0.5); /* Soft grey glow */
+            box-shadow: 0px 0px 5px rgba(50, 205, 50, 0.5); /* Soft glow */
         }
 
         /* Hover effect on buttons */
         .stButton > button:hover {
-            background-color: #808080 !important;
+            background-color: #32CD32 !important;
             color: black !important;
             transition: 0.3s ease-in-out;
         }
@@ -42,11 +43,11 @@ def apply_dark_theme():
             font-weight: bold !important;
             color: white !important;
             background-color: #1e1e1e !important;
-            border: 2px solid #808080 !important;
+            border: 2px solid #32CD32 !important;
         }
 
         div[data-testid="stTabs"] button[aria-selected="true"] {
-            background-color: #808080 !important;
+            background-color: #32CD32 !important;
             color: black !important;
         }
         
@@ -62,7 +63,7 @@ def apply_dark_theme():
         [data-testid="stSidebar"], .sidebar-content {
             background-color: #1e1e1e !important;
             color: #ffffff !important;
-            border-right: 1px solid #808080 !important;
+            border-right: 1px solid #32CD32 !important;
         }
 
         [data-testid="stSidebar"] div {
@@ -76,7 +77,7 @@ def apply_dark_theme():
         
         /* Sidebar menu hover effect */
         .css-1d391kg:hover, .css-18e3th9:hover {
-            background-color: #808080 !important;
+            background-color: #32CD32 !important;
             color: black !important;
             border-radius: 8px;
             transition: 0.3s ease-in-out;
@@ -90,7 +91,7 @@ def apply_dark_theme():
             background: #1e1e1e;
         }
         ::-webkit-scrollbar-thumb {
-            background-color: #808080;
+            background-color: #32CD32;
             border-radius: 10px;
         }
         </style>
