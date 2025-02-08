@@ -5,48 +5,49 @@ def apply_dark_theme():
     st.markdown(
         '''
         <style>
-        /* Apply black background globally */
+        /* Global Background and Text */
         html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"],
         .block-container, .stApp {
             background-color: #000000 !important;
             color: #ffffff !important;
         }
 
-        /* Set input labels to light orange */
+        /* Input Labels and Button Labels in Light Orange */
         .stTextInput > label, .stSelectbox > label, .stButton > button {
             color: #FFA500 !important;  /* Light Orange */
             font-weight: bold;
         }
 
-        /* Text Input Box Improvements */
+        /* Input Boxes and Buttons with Grey Border and Grey Glow */
         .stTextInput, .stSelectbox, .stButton > button {
             background-color: #000000 !important;
             color: white !important;
-            border-radius: 8px !important;  /* Rounded corners */
+            border-radius: 8px !important;
             border: 1px solid #808080 !important; /* Grey border */
             padding: 10px;
             box-shadow: 0px 0px 5px rgba(128, 128, 128, 0.5); /* Grey glow */
         }
 
-        /* Hover effect on buttons */
+        /* Hover effect on buttons remains */
         .stButton > button:hover {
-            background-color: #32CD32 !important;
+            background-color: #32CD32 !important;  /* Green */
             color: black !important;
             transition: 0.3s ease-in-out;
         }
 
         /* Styling for login and create account tabs */
         div[data-testid="stTabs"] button {
-            border-radius: 50px !important;  /* Make tabs rounded */
+            border-radius: 50px !important;  /* Rounded tabs */
             padding: 10px 20px !important;
             font-weight: bold !important;
             color: white !important;
-            background-color: #000000 !important;
-            border: 2px solid #808080 !important; /* Grey border */
+            background-color: #000000 !important;  /* Black background for tabs */
+            border: 2px solid #808080 !important;  /* Grey border for tabs */
         }
 
+        /* When a tab is selected, background changes to pale blue and text becomes black */
         div[data-testid="stTabs"] button[aria-selected="true"] {
-            background-color: #1E90FF !important; /* Blue when selected */
+            background-color: #ADD8E6 !important;  /* Pale Blue */
             color: black !important;
         }
         
@@ -74,7 +75,7 @@ def apply_dark_theme():
             color: white !important;
         }
         
-        /* Sidebar menu hover effect */
+        /* Sidebar menu hover effect remains */
         .css-1d391kg:hover, .css-18e3th9:hover {
             background-color: #32CD32 !important;
             color: black !important;
@@ -90,7 +91,7 @@ def apply_dark_theme():
             background: #000000;
         }
         ::-webkit-scrollbar-thumb {
-            background-color: #32CD32;
+            background-color: #808080;
             border-radius: 10px;
         }
         </style>
