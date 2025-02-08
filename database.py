@@ -4,13 +4,13 @@ import streamlit as st
 from github_sync import pull_db_from_github
 
 def create_tables():
-    """Create the required tables in the database if they don't exist."""
+    """Create the required table in the database if it doesn't exist."""
     db_path = st.secrets["general"]["db_path"]
 
-    # 1) Pull the DB from GitHub to ensure the local copy is updated.
+    # Pull the DB from GitHub to ensure the local version is updated
     pull_db_from_github(db_path)
 
-    # 2) Connect to the database and create the 'users' table.
+    # Now proceed with table creation (only one table: users)
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
@@ -31,6 +31,5 @@ def create_tables():
             total REAL GENERATED ALWAYS AS (as1 + as2 + as3 + as4 + quiz1 + quiz2) STORED
         )
     """)
-
     conn.commit()
     conn.close()
