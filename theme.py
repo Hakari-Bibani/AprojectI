@@ -5,55 +5,54 @@ def apply_dark_theme():
     st.markdown(
         '''
         <style>
-        /* Global Background and Text */
+        /* Global background and text color */
         html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"],
         .block-container, .stApp {
             background-color: #000000 !important;
             color: #ffffff !important;
         }
 
-        /* Input Labels and Button Labels in Light Orange */
+        /* Set input labels to orange and bold */
         .stTextInput > label, .stSelectbox > label, .stButton > button {
-            color: #FFA500 !important;  /* Light Orange */
+            color: #FFA500 !important;  /* Orange */
             font-weight: bold;
         }
 
-        /* Input Boxes and Buttons with Grey Border and Grey Glow */
+        /* Text Input Box and Button Styling */
         .stTextInput, .stSelectbox, .stButton > button {
-            background-color: #000000 !important;
+            background-color: #000000 !important;  /* Black */
             color: white !important;
             border-radius: 8px !important;
-            border: 1px solid #808080 !important; /* Grey border */
+            border: 1px solid #808080 !important;  /* Grey border */
             padding: 10px;
             box-shadow: 0px 0px 5px rgba(128, 128, 128, 0.5); /* Grey glow */
         }
 
-        /* Hover effect on buttons remains */
+        /* Hover effect on buttons */
         .stButton > button:hover {
-            background-color: #32CD32 !important;  /* Green */
+            background-color: #add8e6 !important;  /* Pale blue */
             color: black !important;
             transition: 0.3s ease-in-out;
         }
 
         /* Styling for login and create account tabs */
         div[data-testid="stTabs"] button {
-            border-radius: 50px !important;  /* Rounded tabs */
+            border-radius: 50px !important;
             padding: 10px 20px !important;
             font-weight: bold !important;
             color: white !important;
-            background-color: #000000 !important;  /* Black background for tabs */
-            border: 2px solid #808080 !important;  /* Grey border for tabs */
+            background-color: #000000 !important;
+            border: 2px solid #808080 !important;  /* Grey border */
         }
 
-        /* When a tab is selected, background changes to pale blue and text becomes black */
         div[data-testid="stTabs"] button[aria-selected="true"] {
-            background-color: #ADD8E6 !important;  /* Pale Blue */
+            background-color: #add8e6 !important;  /* Pale blue when selected */
             color: black !important;
         }
         
         /* Custom Error Message Styling - Set to Red */
         .error-text {
-            color: #FF0000 !important; /* Bright Red */
+            color: #FF0000 !important;
             font-weight: bold !important;
             font-size: 16px !important;
             padding: 5px;
@@ -61,9 +60,9 @@ def apply_dark_theme():
 
         /* Sidebar Styling */
         [data-testid="stSidebar"], .sidebar-content {
-            background-color: #000000 !important;
+            background-color: #000000 !important;  /* Black */
             color: #ffffff !important;
-            border-right: 1px solid #808080 !important; /* Grey border */
+            border-right: 1px solid #808080 !important;  /* Grey border */
         }
 
         [data-testid="stSidebar"] div {
@@ -75,9 +74,9 @@ def apply_dark_theme():
             color: white !important;
         }
         
-        /* Sidebar menu hover effect remains */
+        /* Sidebar menu hover effect */
         .css-1d391kg:hover, .css-18e3th9:hover {
-            background-color: #32CD32 !important;
+            background-color: #add8e6 !important;  /* Pale blue */
             color: black !important;
             border-radius: 8px;
             transition: 0.3s ease-in-out;
