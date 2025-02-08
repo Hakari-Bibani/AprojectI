@@ -1,3 +1,6 @@
+''' theme.py - Manages black theme for the entire app, including sidebar ''' 
+import streamlit as st
+
 def apply_dark_theme():
     st.markdown(
         '''
