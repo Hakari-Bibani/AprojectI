@@ -1,4 +1,3 @@
-
 # control.py - Admin Control Panel for User Approvals
 import streamlit as st
 import sqlite3
@@ -19,6 +18,7 @@ def admin_login():
 def get_pending_users():
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
+    # Query pending users from the users table (approved == 0)
     cursor.execute("SELECT rowid, fullname, email, phone, username FROM users WHERE approved = 0")
     pending = cursor.fetchall()
     conn.close()
@@ -30,7 +30,7 @@ def update_user_approval(rowid, new_status):
     cursor.execute("UPDATE users SET approved = ? WHERE rowid = ?", (new_status, rowid))
     conn.commit()
     conn.close()
-    # After updating the database, push the changes to GitHub.
+    # After updating, push the changes to GitHub.
     push_db_to_github(st.secrets["general"]["db_path"])
 
 def show_admin_panel():
