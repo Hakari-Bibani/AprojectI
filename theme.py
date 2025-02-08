@@ -27,15 +27,25 @@ def apply_dark_theme():
         }
         /* Hover effect on buttons */
         .stButton > button:hover {
-            background-color: #B0E0E6 !important;  /* Soft blue */
             background-color: #d3d3d3 !important;  /* Light gray */
             color: black !important;
             transition: 0.3s ease-in-out;
         }
-@@ -46,28 +46,28 @@
+        /* Styling for login and create account tabs */
+        div[data-testid="stTabs"] {
+            display: flex;
+            justify-content: center;
+        }
+        div[data-testid="stTabs"] button {
+            border-radius: 50px !important;
+            padding: 10px 20px !important;
+            font-weight: bold !important;
+            color: white !important;
+            background-color: #000000 !important;
+            border: 2px solid #808080 !important;  /* Grey border */
+            border: 1px solid #808080 !important;  /* Changed from 2px to 1px */
         }
         div[data-testid="stTabs"] button[aria-selected="true"] {
-            background-color: #B0E0E6 !important;  /* Soft blue when selected */
             background-color: #d3d3d3 !important;  /* Light gray when selected */
             color: black !important;
         }
@@ -59,11 +69,11 @@ def apply_dark_theme():
         
         /* Sidebar menu item styling */
         .css-1d391kg, .css-18e3th9 {
-@@ -76,24 +76,24 @@
+            color: white !important;
+        }
         
         /* Sidebar menu hover effect */
         .css-1d391kg:hover, .css-18e3th9:hover {
-            background-color: #B0E0E6 !important;  /* Soft blue */
             background-color: #d3d3d3 !important;  /* Light gray */
             color: black !important;
             border-radius: 8px;
