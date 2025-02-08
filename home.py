@@ -2,90 +2,155 @@ import streamlit as st
 from theme import apply_dark_theme
 from style import apply_custom_styles
 
-# Custom CSS for styling the header and background
-def set_custom_style():
-    st.markdown("""
-        <style>
-        /* Main container styling */
-        .stApp {
-            background-color: black;
-        }
-        
-        /* Header styling */
-        .header-container {
-            padding: 2rem;
-            background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,1) 100%);
-            border-bottom: 1px solid rgba(79, 70, 229, 0.1);
-            text-align: center;
-            animation: glow 4s infinite;
-        }
-        
-        /* Title styling */
-        .title {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 3.5rem;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
-        }
-        
-        /* Subtitle styling */
-        .subtitle {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1.5rem;
-            color: #A5B4FC;
-            margin-bottom: 1rem;
-        }
-        
-        /* Tech stack styling */
-        .tech-stack {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1rem;
-            color: #6366F1;
-            opacity: 0.8;
-        }
-        
-        /* Animation keyframes */
-        @keyframes glow {
-            0% { box-shadow: 0 0 20px rgba(79, 70, 229, 0.1); }
-            50% { box-shadow: 0 0 30px rgba(79, 70, 229, 0.2); }
-            100% { box-shadow: 0 0 20px rgba(79, 70, 229, 0.1); }
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
-# Function to create the custom header
-def create_header():
-    header_html = """
-        <div class="header-container">
-            <div class="title">AI for Impact</div>
-            <div class="subtitle">Building Tomorrow's Solutions Today</div>
-            <div class="tech-stack">Python • Web Apps • Machine Learning • Data Analysis • Google Colab</div>
-        </div>
-    """
-    st.markdown(header_html, unsafe_allow_html=True)
-
 def show_home():
-    # Apply your dark theme and any other custom styles you already have
-    apply_dark_theme()      
-    apply_custom_styles()   
-    
-    # Instead of displaying an embedded video, we set the custom style and show our header.
-    set_custom_style()
-    create_header()
+    apply_dark_theme()      # ensures background is dark
+    apply_custom_styles()   # ensures animated title/footer style
 
-    # You can add more content below the header if you wish.
-    st.markdown("---")
-    st.write("## Welcome to AI for Impact")
-    st.write("""
-    Learn how to leverage Python and AI to create meaningful solutions.
-    This course combines practical coding skills with real-world applications.
-    """)
-    
+    st.markdown('<div class="title">🌟 Welcome to AI for Impact</div>', unsafe_allow_html=True)
+
+    # Instead of embedding a video, render the SVG graphic
+    svg_code = """
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+        <defs>
+            <!-- Impact wave gradient -->
+            <linearGradient id="impactWave" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#4F46E5"/>
+                <stop offset="50%" style="stop-color:#7C3AED"/>
+                <stop offset="100%" style="stop-color:#EC4899"/>
+            </linearGradient>
+
+            <!-- Enhanced glow effects -->
+            <filter id="primaryGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="4" result="blur"/>
+                <feFlood flood-color="#4F46E5" flood-opacity="0.3" result="color"/>
+                <feComposite in="color" in2="blur" operator="in" result="glow"/>
+                <feMerge>
+                    <feMergeNode in="glow"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+
+            <!-- Tech pattern -->
+            <pattern id="techGrid" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+                <path d="M25 0 v50 M0 25 h50" stroke="#333333" stroke-width="0.5" opacity="0.15"/>
+                <circle cx="25" cy="25" r="1" fill="#333333" opacity="0.2"/>
+            </pattern>
+
+            <!-- Binary rain effect -->
+            <filter id="binaryRain">
+                <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="5" seed="5"/>
+                <feDisplacementMap in="SourceGraphic" scale="5"/>
+            </filter>
+        </defs>
+
+        <!-- Pure black background -->
+        <rect width="800" height="400" fill="#000000"/>
+        <rect width="800" height="400" fill="url(#techGrid)"/>
+
+        <!-- Dynamic world map representation -->
+        <g transform="translate(50, 50)" filter="url(#primaryGlow)" opacity="0.3">
+            <path d="M0 150 Q200 100 400 150 T800 150" stroke="url(#impactWave)" stroke-width="2" fill="none">
+                <animate attributeName="d" 
+                         dur="8s" 
+                         values="M0 150 Q200 100 400 150 T800 150;
+                                M0 170 Q200 120 400 170 T800 170;
+                                M0 150 Q200 100 400 150 T800 150"
+                         repeatCount="indefinite"/>
+            </path>
+            <!-- Connection points representing global impact -->
+            <g class="impact-points">
+                <circle cx="100" cy="120" r="3" fill="#4F46E5">
+                    <animate attributeName="r" values="3;5;3" dur="3s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="300" cy="140" r="3" fill="#7C3AED">
+                    <animate attributeName="r" values="3;5;3" dur="3s" begin="1s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="500" cy="130" r="3" fill="#EC4899">
+                    <animate attributeName="r" values="3;5;3" dur="3s" begin="2s" repeatCount="indefinite"/>
+                </circle>
+            </g>
+        </g>
+
+        <!-- Advanced neural network visualization -->
+        <g transform="translate(100, 100)" filter="url(#primaryGlow)">
+            <!-- Multiple interconnected layers -->
+            <g class="neural-network">
+                <!-- Layer connections with data flow -->
+                <path d="M0 100 C100 50 200 150 300 100" stroke="url(#impactWave)" stroke-width="1.5" fill="none" opacity="0.6">
+                    <animate attributeName="stroke-dasharray" values="0,1000;1000,0" dur="5s" repeatCount="indefinite"/>
+                </path>
+                <path d="M0 150 C100 100 200 200 300 150" stroke="url(#impactWave)" stroke-width="1.5" fill="none" opacity="0.6">
+                    <animate attributeName="stroke-dasharray" values="0,1000;1000,0" dur="5s" begin="0.5s" repeatCount="indefinite"/>
+                </path>
+            </g>
+        </g>
+
+        <!-- Python code elements with impact focus -->
+        <g transform="translate(500, 140)" filter="url(#primaryGlow)">
+            <g class="code-snippet" opacity="0.8">
+                <text x="0" y="0" font-family="JetBrains Mono, monospace" fill="#A5B4FC" font-size="14">
+                    class SocialImpact:
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="4s" repeatCount="indefinite"/>
+                </text>
+                <text x="20" y="25" font-family="JetBrains Mono, monospace" fill="#A5B4FC" font-size="14">
+                    def analyze_data(self):
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="4s" begin="0.5s" repeatCount="indefinite"/>
+                </text>
+                <text x="40" y="50" font-family="JetBrains Mono, monospace" fill="#A5B4FC" font-size="14">
+                    return AI.transform()
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="4s" begin="1s" repeatCount="indefinite"/>
+                </text>
+            </g>
+        </g>
+
+        <!-- Web development elements -->
+        <g transform="translate(500, 230)" filter="url(#primaryGlow)">
+            <g class="web-elements" opacity="0.6">
+                <text x="0" y="0" font-family="JetBrains Mono, monospace" fill="#818CF8" font-size="14">&lt;div class="impact"&gt;</text>
+                <text x="20" y="25" font-family="JetBrains Mono, monospace" fill="#818CF8" font-size="14">&lt;App /&gt;</text>
+                <text x="0" y="50" font-family="JetBrains Mono, monospace" fill="#818CF8" font-size="14">&lt;/div&gt;</text>
+            </g>
+        </g>
+
+        <!-- Course title with impact animation -->
+        <g transform="translate(400, 80)" filter="url(#primaryGlow)">
+            <text text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="56" fill="#FFFFFF" font-weight="bold">
+                AI for Impact
+                <animate attributeName="opacity" values="0.9;1;0.9" dur="4s" repeatCount="indefinite"/>
+            </text>
+        </g>
+
+        <!-- Inspiring subtitle -->
+        <g transform="translate(400, 330)" filter="url(#primaryGlow)">
+            <text text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="24" fill="#A5B4FC">
+                Building Tomorrow's Solutions Today
+                <animate attributeName="fill" values="#A5B4FC;#818CF8;#A5B4FC" dur="6s" repeatCount="indefinite"/>
+            </text>
+        </g>
+
+        <!-- Technology stack with icons -->
+        <g transform="translate(400, 370)" filter="url(#primaryGlow)">
+            <text text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="16" fill="#6366F1">
+                Python • Web Apps • Machine Learning • Data Analysis • Google Colab
+            </text>
+        </g>
+
+        <!-- Floating particles representing data points -->
+        <g class="particles" filter="url(#binaryRain)">
+            <circle cx="150" cy="200" r="2" fill="#4F46E5" opacity="0.5">
+                <animate attributeName="cy" values="200;220;200" dur="4s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="650" cy="180" r="2" fill="#7C3AED" opacity="0.5">
+                <animate attributeName="cy" values="180;200;180" dur="4s" begin="1s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="400" cy="150" r="2" fill="#EC4899" opacity="0.5">
+                <animate attributeName="cy" values="150;170;150" dur="4s" begin="2s" repeatCount="indefinite"/>
+            </circle>
+        </g>
+    </svg>
+    """
+    st.markdown(svg_code, unsafe_allow_html=True)
+
     # Polished Footer Messages with Custom Colors
     st.markdown('<div class="footer footer-assignments">📌 Access Quizzes and Assignments via the Sidebar</div>', unsafe_allow_html=True)
     st.markdown('<div class="footer footer-partner">💡 AI For Impact © 2025 - Your Partner in Academic Success</div>', unsafe_allow_html=True)
-
-if __name__ == "__main__":
-    show_home()
