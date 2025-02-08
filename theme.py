@@ -1,6 +1,3 @@
-''' theme.py - Manages black theme for the entire app, including sidebar '''
-import streamlit as st
-
 def apply_dark_theme():
     st.markdown(
         '''
@@ -30,7 +27,7 @@ def apply_dark_theme():
 
         /* Hover effect on buttons */
         .stButton > button:hover {
-            background-color: #add8e6 !important;  /* Pale blue */
+            background-color: #0000FF !important;  /* Blue */
             color: black !important;
             transition: 0.3s ease-in-out;
         }
@@ -46,7 +43,7 @@ def apply_dark_theme():
         }
 
         div[data-testid="stTabs"] button[aria-selected="true"] {
-            background-color: #add8e6 !important;  /* Pale blue when selected */
+            background-color: #0000FF !important;  /* Blue when selected */
             color: black !important;
         }
         
@@ -76,7 +73,7 @@ def apply_dark_theme():
         
         /* Sidebar menu hover effect */
         .css-1d391kg:hover, .css-18e3th9:hover {
-            background-color: #add8e6 !important;  /* Pale blue */
+            background-color: #0000FF !important;  /* Blue */
             color: black !important;
             border-radius: 8px;
             transition: 0.3s ease-in-out;
