@@ -149,11 +149,10 @@ def show_home():
     </svg>
     """
     # Render the SVG using components.html (adjust height if needed)
-    components.html(svg_code, height=420)
+    components.html(svg_code, height=490)
 
     # Footer Messages
     st.markdown('<div class="footer footer-assignments">📌 Access Quizzes and Assignments via the Sidebar</div>', unsafe_allow_html=True)
-    st.markdown('<div class="footer footer-partner">💡 AI For Impact © 2025 - Your Partner in Academic Success</div>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     show_home()
