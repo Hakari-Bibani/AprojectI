@@ -1,4 +1,3 @@
-
 # admin.py
 import streamlit as st
 import sqlite3
@@ -64,6 +63,10 @@ def drop_column_from_table(table, col_to_drop):
       3. Dropping the old table.
       4. Renaming the new table to the old table name.
     """
+    # Do not allow dropping the computed column "total" in the users table.
+    if table == "users" and col_to_drop == "total":
+        st.error("Cannot drop the computed column 'total'.")
+        return
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -81,9 +84,8 @@ def drop_column_from_table(table, col_to_drop):
             st.error(f"Column '{col_to_drop}' not found in table '{table}'.")
             return
 
-        # 2. Create a new table schema (we will use a temporary name)
+        # 2. Create a new table schema (temporary name)
         new_table = f"{table}_temp"
-        # Build column definitions (this is a simplified approach; constraints and defaults may be lost)
         new_columns_def = []
         for col in schema_info:
             if col["name"] == col_to_drop:
@@ -183,7 +185,8 @@ if admin_login():
         try:
             conn = get_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+            # Filter out system tables
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")
             tables = [row["name"] for row in cursor.fetchall()]
             conn.close()
             if tables:
@@ -230,7 +233,7 @@ if admin_login():
         try:
             conn = get_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")
             tables = [row["name"] for row in cursor.fetchall()]
             conn.close()
             table_to_drop = st.selectbox("Select table to drop", tables)
@@ -259,7 +262,7 @@ if admin_login():
         try:
             conn = get_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")
             tables = [row["name"] for row in cursor.fetchall()]
             conn.close()
         except Exception as e:
@@ -268,6 +271,9 @@ if admin_login():
         if tables:
             table = st.selectbox("Select Table", tables, key="insert_table")
             schema = get_table_schema(table)
+            # If inserting into the users table, exclude the computed column "total"
+            if table == "users":
+                schema = [col for col in schema if col["name"] != "total"]
             if schema:
                 st.write("Table Columns:", [col["name"] for col in schema])
                 new_data = {}
@@ -300,7 +306,7 @@ if admin_login():
         try:
             conn = get_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")
             tables = [row["name"] for row in cursor.fetchall()]
             conn.close()
         except Exception as e:
@@ -332,7 +338,10 @@ if admin_login():
                         conn.close()
             if "edit_rows" in st.session_state and st.session_state["edit_rows"]:
                 st.write("Update values for the fetched rows (this example updates the first matching row):")
+                # Exclude the computed column "total" if present
                 row_data = st.session_state["edit_rows"][0]
+                if table == "users" and "total" in row_data:
+                    row_data = {k: v for k, v in row_data.items() if k != "total"}
                 updated_data = {}
                 for key, value in row_data.items():
                     updated_data[key] = st.text_input(f"Value for {key}", value=value, key=f"edit_{key}")
@@ -359,7 +368,7 @@ if admin_login():
         try:
             conn = get_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")
             tables = [row["name"] for row in cursor.fetchall()]
             conn.close()
         except Exception as e:
@@ -395,7 +404,7 @@ if admin_login():
         try:
             conn = get_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")
             tables = [row["name"] for row in cursor.fetchall()]
             conn.close()
         except Exception as e:
@@ -404,7 +413,6 @@ if admin_login():
 
         if tables:
             table = st.selectbox("Select Table to Alter", tables, key="alter_table")
-            # Get current schema for reference
             schema = get_table_schema(table)
             st.write("Current schema:", [f"{col['name']} ({col['type']})" for col in schema])
 
@@ -429,13 +437,14 @@ if admin_login():
                 st.button("Push changes to GitHub", on_click=push_changes)
 
             elif alter_option == "Delete Column":
-                # Provide a dropdown to select which column to delete.
-                # (We do not allow deletion of all columns.)
                 col_names = [col["name"] for col in schema]
                 col_to_delete = st.selectbox("Select Column to Delete", col_names, key="col_to_delete")
-                st.warning("Deleting a column will recreate the table without the selected column. This operation is irreversible.")
-                if st.button("Delete Column"):
-                    drop_column_from_table(table, col_to_delete)
+                if table == "users" and col_to_delete == "total":
+                    st.error("Cannot delete the computed column 'total'.")
+                else:
+                    st.warning("Deleting a column will recreate the table without the selected column. This operation is irreversible.")
+                    if st.button("Delete Column"):
+                        drop_column_from_table(table, col_to_delete)
                 st.button("Push changes to GitHub", on_click=push_changes)
 
     # --- 9. Backup / Restore ---
