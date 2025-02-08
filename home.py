@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 from theme import apply_dark_theme
 from style import apply_custom_styles
 
@@ -8,7 +9,7 @@ def show_home():
 
     st.markdown('<div class="title">🌟 Welcome to AI for Impact</div>', unsafe_allow_html=True)
 
-    # Instead of embedding a video, render the SVG graphic
+    # Replace the video with the SVG graphic using components.html
     svg_code = """
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
         <defs>
@@ -149,8 +150,13 @@ def show_home():
         </g>
     </svg>
     """
-    st.markdown(svg_code, unsafe_allow_html=True)
+    # Use st.components.v1.html to embed the SVG. Adjust the height if needed.
+    components.html(svg_code, height=420)
 
     # Polished Footer Messages with Custom Colors
     st.markdown('<div class="footer footer-assignments">📌 Access Quizzes and Assignments via the Sidebar</div>', unsafe_allow_html=True)
     st.markdown('<div class="footer footer-partner">💡 AI For Impact © 2025 - Your Partner in Academic Success</div>', unsafe_allow_html=True)
+
+# To run this page in Streamlit, simply call show_home()
+if __name__ == "__main__":
+    show_home()
