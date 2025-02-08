@@ -7,7 +7,31 @@ def show_home():
     apply_dark_theme()      # ensures background is dark
     apply_custom_styles()   # ensures animated styles
 
-    # Render the SVG graphic at the top (replacing the title area)
+    # Inject custom CSS to remove top padding/margin of the main container.
+    st.markdown(
+        """
+        <style>
+            /* Remove top padding from the main block container */
+            .block-container {
+                padding-top: 0rem;
+                margin-top: 0rem;
+            }
+            /* Optionally, hide the Streamlit header if you want a full-screen experience */
+            header { 
+                visibility: hidden;
+                height: 0;
+            }
+            /* Remove body margin */
+            body {
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # Render the SVG graphic at the very top using components.html.
     svg_code = """
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
         <defs>
@@ -72,9 +96,7 @@ def show_home():
 
         <!-- Advanced neural network visualization -->
         <g transform="translate(100, 100)" filter="url(#primaryGlow)">
-            <!-- Multiple interconnected layers -->
             <g class="neural-network">
-                <!-- Layer connections with data flow -->
                 <path d="M0 100 C100 50 200 150 300 100" stroke="url(#impactWave)" stroke-width="1.5" fill="none" opacity="0.6">
                     <animate attributeName="stroke-dasharray" values="0,1000;1000,0" dur="5s" repeatCount="indefinite"/>
                 </path>
@@ -148,8 +170,16 @@ def show_home():
         </g>
     </svg>
     """
-    # Render the SVG using components.html (adjust height if needed)
-    components.html(svg_code, height=500)
+
+    # Render the SVG using components.html and ensure there is no extra margin.
+    components.html(
+        f"""
+        <div style="margin:0; padding:0;">
+            {svg_code}
+        </div>
+        """,
+        height=490,
+    )
 
     # Footer Messages
     st.markdown('<div class="footer footer-assignments">📌 Access Quizzes and Assignments via the Sidebar</div>', unsafe_allow_html=True)
