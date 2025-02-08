@@ -1,9 +1,10 @@
+
 # login.py - Manages user authentication, registration, and password recovery
 import streamlit as st
 import sqlite3
 import smtplib
 from email.message import EmailMessage
-from database import create_tables  # This function should now create only the 'users' table with the new schema.
+from database import create_tables
 from theme import apply_dark_theme
 from github_sync import push_db_to_github  # Ensure this function uses st.secrets["general"]["repo"] and st.secrets["general"]["token"]
 
@@ -43,31 +44,33 @@ def send_password_email(recipient_email, username, password):
 
 def register_user(fullname, email, phone, username, password):
     """
-    Registers a new user in the database with approved=0 and initializes assignment and quiz scores to 0.
+    Registers a new user in the database with approved=0.
     """
     conn = sqlite3.connect(st.secrets["general"]["db_path"])
     cursor = conn.cursor()
 
-    # Check if the username or email is already taken.
-    cursor.execute("SELECT 1 FROM users WHERE username = ? OR email = ?", (username, email))
+    # Check if the password is already taken.
+    cursor.execute("SELECT 1 FROM users WHERE password = ?", (password,))
     if cursor.fetchone() is not None:
         conn.close()
         return False
 
     try:
-        # Insert user details along with initial values for assignments and quizzes.
-        # Note: The 'total' column is auto-generated from as1, as2, as3, as4, quiz1, and quiz2.
         cursor.execute(
-            "INSERT INTO users (fullname, email, phone, username, password, approved, as1, as2, as3, as4, quiz1, quiz2) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (fullname, email, phone, username, password, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+            "INSERT INTO users (fullname, email, phone, username, password) VALUES (?, ?, ?, ?, ?)",
+            (fullname, email, phone, username, password)
         )
         conn.commit()
-    except sqlite3.IntegrityError as e:
-        st.error(f"Database error: {e}")
+    except sqlite3.IntegrityError:
         conn.close()
         return False
 
+    # Initialize a record in the 'records' table with zeroed scores.
+    cursor.execute(
+        "INSERT INTO records (password, fullname, email, as1, as2, as3, as4, quiz1, quiz2, total) VALUES (?, ?, ?, 0, 0, 0, 0, 0, 0, 0)",
+        (password, fullname, email)
+    )
+    conn.commit()
     conn.close()
     return True
 
@@ -84,7 +87,7 @@ def login_user(username, password):
     conn.close()
     
     if user:
-        approved = user[5]  # In the new table, the 6th column (index 5) is 'approved'
+        approved = user[5]  # Assuming 6th column is 'approved'
         if approved != 1:
             return "not_approved"
     return user
@@ -93,10 +96,8 @@ def show_login_create_account():
     """
     Renders the login, create account, and forgot password tabs.
     """
-    # Apply the dark theme.
     apply_dark_theme()
-    # Ensure that the database and its table exist.
-    create_tables()
+    create_tables()  # Ensure database and tables exist
 
     tabs = st.tabs(["Login", "Create Account", "Forgot Password"])
 
@@ -136,10 +137,10 @@ def show_login_create_account():
                     st.error("❌ Please enter a valid phone number (digits only).")
                     return
                 if not register_user(reg_fullname, reg_email, phone_int, reg_username, reg_password):
-                    st.error("⚠️ Username or Email already exists. Choose a different one.")
+                    st.error("⚠️ Username or Password already exists. Choose a different one.")
                 else:
                     st.success("✅ Account created! Please wait for admin approval before logging in.")
-                    # Push changes to GitHub; ensure push_db_to_github uses the repo and token from st.secrets.
+                    # Push changes to GitHub; ensure push_db_to_github uses the repo and token from st.secrets
                     push_db_to_github(st.secrets["general"]["db_path"])
             else:
                 st.error("⚠️ Please fill out all fields.")
