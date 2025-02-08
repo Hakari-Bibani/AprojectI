@@ -1,4 +1,3 @@
-
 ''' theme.py - Manages dark mode theme for the entire app, including sidebar '''
 import streamlit as st
 
@@ -6,30 +5,30 @@ def apply_dark_theme():
     st.markdown(
         '''
         <style>
-        /* Apply dark background globally */
+        /* Global background set to black and text to white */
         html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"],
         .block-container, .stApp {
-            background-color: #121212 !important;
+            background-color: #000000 !important;
             color: #ffffff !important;
         }
 
-        /* Set input labels to green */
+        /* Set input labels to light orange and bold */
         .stTextInput > label, .stSelectbox > label, .stButton > button {
-            color: #32CD32 !important;  /* Light Green */
+            color: #FFA500 !important;  /* Light Orange */
             font-weight: bold;
         }
 
         /* Text Input Box Improvements */
         .stTextInput, .stSelectbox, .stButton > button {
-            background-color: #1e1e1e !important;
+            background-color: #000000 !important;
             color: white !important;
             border-radius: 8px !important;  /* Rounded corners */
-            border: 1px solid #32CD32 !important; /* Green border */
+            border: 1px solid #808080 !important; /* Grey border */
             padding: 10px;
-            box-shadow: 0px 0px 5px rgba(50, 205, 50, 0.5); /* Soft glow */
+            box-shadow: 0px 0px 5px rgba(128, 128, 128, 0.5) !important; /* Grey glow */
         }
 
-        /* Hover effect on buttons */
+        /* Hover effect on buttons: background changes to green and text changes to black */
         .stButton > button:hover {
             background-color: #32CD32 !important;
             color: black !important;
@@ -42,7 +41,7 @@ def apply_dark_theme():
             padding: 10px 20px !important;
             font-weight: bold !important;
             color: white !important;
-            background-color: #1e1e1e !important;
+            background-color: #000000 !important;
             border: 2px solid #32CD32 !important;
         }
 
@@ -61,9 +60,9 @@ def apply_dark_theme():
 
         /* Sidebar Styling */
         [data-testid="stSidebar"], .sidebar-content {
-            background-color: #1e1e1e !important;
+            background-color: #000000 !important;
             color: #ffffff !important;
-            border-right: 1px solid #32CD32 !important;
+            border-right: 1px solid #808080 !important;
         }
 
         [data-testid="stSidebar"] div {
@@ -88,7 +87,7 @@ def apply_dark_theme():
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #1e1e1e;
+            background: #000000;
         }
         ::-webkit-scrollbar-thumb {
             background-color: #32CD32;
