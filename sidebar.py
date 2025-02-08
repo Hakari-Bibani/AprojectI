@@ -1,5 +1,5 @@
-
 import streamlit as st
+import base64  # <-- New import for base64 encoding
 
 def show_sidebar():
     # Custom CSS for the sidebar styling with animated title
@@ -56,10 +56,25 @@ def show_sidebar():
             color: white;
             transform: translateY(-2px);
         }
+        
+        /* Logo styling */
+        .sidebar-logo {
+            width: 100%;
+            margin-bottom: 1rem;
+            filter: brightness(0.7); /* Darken the logo */
+        }
         </style>
         """, unsafe_allow_html=True)
 
     with st.sidebar:
+        # Add your logo above the title.
+        try:
+            with open("logo.jpg", "rb") as image_file:
+                encoded_logo = base64.b64encode(image_file.read()).decode()
+            st.markdown(f'<img src="data:image/jpeg;base64,{encoded_logo}" class="sidebar-logo">', unsafe_allow_html=True)
+        except Exception as e:
+            st.error("Logo file not found.")
+
         # Custom HTML title with animation
         st.markdown('<div class="sidebar-title">AI For Impact</div>', unsafe_allow_html=True)
 
