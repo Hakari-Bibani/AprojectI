@@ -36,13 +36,17 @@ def apply_dark_theme():
         }
 
         /* Styling for login and create account tabs */
+        div[data-testid="stTabs"] {
+            display: flex;
+            justify-content: center;
+        }
         div[data-testid="stTabs"] button {
             border-radius: 50px !important;
             padding: 10px 20px !important;
             font-weight: bold !important;
             color: white !important;
             background-color: #000000 !important;
-            border: 2px solid #808080 !important;  /* Grey border */
+            border: 1px solid #808080 !important;  /* Changed from 2px to 1px */
         }
 
         div[data-testid="stTabs"] button[aria-selected="true"] {
