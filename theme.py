@@ -1,18 +1,18 @@
-''' theme.py - Manages dark mode theme for the entire app, including sidebar '''
+''' theme.py - Manages black theme for the entire app, including sidebar '''
 import streamlit as st
 
 def apply_dark_theme():
     st.markdown(
         '''
         <style>
-        /* Global background set to black and text to white */
+        /* Apply black background globally */
         html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"],
         .block-container, .stApp {
             background-color: #000000 !important;
             color: #ffffff !important;
         }
 
-        /* Set input labels to light orange and bold */
+        /* Set input labels to light orange */
         .stTextInput > label, .stSelectbox > label, .stButton > button {
             color: #FFA500 !important;  /* Light Orange */
             font-weight: bold;
@@ -25,10 +25,10 @@ def apply_dark_theme():
             border-radius: 8px !important;  /* Rounded corners */
             border: 1px solid #808080 !important; /* Grey border */
             padding: 10px;
-            box-shadow: 0px 0px 5px rgba(128, 128, 128, 0.5) !important; /* Grey glow */
+            box-shadow: 0px 0px 5px rgba(128, 128, 128, 0.5); /* Grey glow */
         }
 
-        /* Hover effect on buttons: background changes to green and text changes to black */
+        /* Hover effect on buttons */
         .stButton > button:hover {
             background-color: #32CD32 !important;
             color: black !important;
@@ -42,11 +42,11 @@ def apply_dark_theme():
             font-weight: bold !important;
             color: white !important;
             background-color: #000000 !important;
-            border: 2px solid #32CD32 !important;
+            border: 2px solid #808080 !important; /* Grey border */
         }
 
         div[data-testid="stTabs"] button[aria-selected="true"] {
-            background-color: #32CD32 !important;
+            background-color: #1E90FF !important; /* Blue when selected */
             color: black !important;
         }
         
@@ -62,7 +62,7 @@ def apply_dark_theme():
         [data-testid="stSidebar"], .sidebar-content {
             background-color: #000000 !important;
             color: #ffffff !important;
-            border-right: 1px solid #808080 !important;
+            border-right: 1px solid #808080 !important; /* Grey border */
         }
 
         [data-testid="stSidebar"] div {
