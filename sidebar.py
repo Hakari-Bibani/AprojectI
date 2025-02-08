@@ -1,16 +1,16 @@
 import streamlit as st
-import base64  # <-- New import for base64 encoding
 
 def show_sidebar():
-    # Custom CSS for the sidebar styling with animated title
+    # Custom CSS for the sidebar styling with dark background
     st.markdown("""
         <style>
-        /* Sidebar styling */
+        /* Sidebar styling with dark background */
         .css-1d391kg {
             padding: 2rem 1rem;
+            background-color: #111;  /* dark background color */
         }
         
-        /* Title animation and styling */
+        /* (Removed the animated title styling as it is no longer used)
         .sidebar-title {
             background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
             background-size: 200% 200%;
@@ -23,6 +23,7 @@ def show_sidebar():
             animation: gradient 5s ease infinite;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
+        */
         
         @keyframes gradient {
             0% {
@@ -56,27 +57,12 @@ def show_sidebar():
             color: white;
             transform: translateY(-2px);
         }
-        
-        /* Logo styling */
-        .sidebar-logo {
-            width: 100%;
-            margin-bottom: 1rem;
-            filter: brightness(0.7); /* Darken the logo */
-        }
         </style>
         """, unsafe_allow_html=True)
 
     with st.sidebar:
-        # Add your logo above the title.
-        try:
-            with open("logo.jpg", "rb") as image_file:
-                encoded_logo = base64.b64encode(image_file.read()).decode()
-            st.markdown(f'<img src="data:image/jpeg;base64,{encoded_logo}" class="sidebar-logo">', unsafe_allow_html=True)
-        except Exception as e:
-            st.error("Logo file not found.")
-
-        # Custom HTML title with animation
-        st.markdown('<div class="sidebar-title">AI For Impact</div>', unsafe_allow_html=True)
+        # Add the logo image at the top (remove the animated title)
+        st.image("logo.jpg", use_column_width=True)
 
         # Home section
         with st.expander("🏠 HOME", expanded=False):
