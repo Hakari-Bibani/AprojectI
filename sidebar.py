@@ -1,38 +1,12 @@
 import streamlit as st
 
 def show_sidebar():
-    # Custom CSS for the sidebar styling with animated title
+    # Custom CSS for sidebar styling (removed animated title CSS)
     st.markdown("""
         <style>
-        /* Sidebar styling */
+        /* Sidebar container padding */
         .css-1d391kg {
             padding: 2rem 1rem;
-        }
-        
-        /* Title animation and styling */
-        .sidebar-title {
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
-            background-size: 200% 200%;
-            color: white;
-            padding: 1rem;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 2rem;
-            animation: gradient 5s ease infinite;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
         }
         
         /* Expander styling */
@@ -59,15 +33,16 @@ def show_sidebar():
         """, unsafe_allow_html=True)
 
     with st.sidebar:
-        # Custom HTML title with animation
-        st.markdown('<div class="sidebar-title">AI For Impact</div>', unsafe_allow_html=True)
+        # Display logo above the sidebar content.
+        # Update "logo.jpg" with the correct path to your image file.
+        st.image("logo.jpg", use_column_width=True)
 
         # Home section
         with st.expander("🏠 HOME", expanded=False):
             if st.button("Home Page", key="home", use_container_width=True):
                 st.session_state["page"] = "home"
 
-        # Modules section (moved to be directly after HOME)
+        # Modules section
         with st.expander("📘 MODULES", expanded=False):
             if st.button("Introduction", key="modules_intro", use_container_width=True):
                 st.session_state["page"] = "modules_intro"
@@ -110,5 +85,5 @@ def show_sidebar():
             if st.button("Logout", key="logout", use_container_width=True):
                 st.session_state["page"] = "logout"
 
-    # Return the current page
+    # Return the currently selected page or default to "home"
     return st.session_state.get("page", "home")
