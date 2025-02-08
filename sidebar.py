@@ -1,16 +1,15 @@
 import streamlit as st
 
 def show_sidebar():
-    # Custom CSS for the sidebar styling with dark background
+    # Custom CSS for the sidebar styling with animated title (unused now)
     st.markdown("""
         <style>
-        /* Sidebar styling with dark background */
+        /* Sidebar styling */
         .css-1d391kg {
             padding: 2rem 1rem;
-            background-color: #111;  /* dark background color */
         }
         
-        /* (Removed the animated title styling as it is no longer used)
+        /* (Unused) Title animation and styling */
         .sidebar-title {
             background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
             background-size: 200% 200%;
@@ -23,7 +22,6 @@ def show_sidebar():
             animation: gradient 5s ease infinite;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        */
         
         @keyframes gradient {
             0% {
@@ -61,7 +59,8 @@ def show_sidebar():
         """, unsafe_allow_html=True)
 
     with st.sidebar:
-        # Add the logo image at the top (remove the animated title)
+        # Replace the text title with your logo image.
+        # Make sure "logo.jpg" is in the same folder or update the path accordingly.
         st.image("logo.jpg", use_column_width=True)
 
         # Home section
@@ -69,7 +68,7 @@ def show_sidebar():
             if st.button("Home Page", key="home", use_container_width=True):
                 st.session_state["page"] = "home"
 
-        # Modules section (moved to be directly after HOME)
+        # Modules section
         with st.expander("📘 MODULES", expanded=False):
             if st.button("Introduction", key="modules_intro", use_container_width=True):
                 st.session_state["page"] = "modules_intro"
