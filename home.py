@@ -7,8 +7,6 @@ def show_home():
     apply_dark_theme()      # ensures background is dark
     apply_custom_styles()   # ensures animated title/footer style
 
-    st.markdown('<div class="title">🌟 Welcome to AI for Impact</div>', unsafe_allow_html=True)
-
     # Replace the video with the SVG graphic using components.html
     svg_code = """
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
