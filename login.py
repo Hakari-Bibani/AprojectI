@@ -1,4 +1,3 @@
-
 # login.py - Manages user authentication, registration, and password recovery
 import streamlit as st
 import sqlite3
@@ -65,12 +64,6 @@ def register_user(fullname, email, phone, username, password):
         conn.close()
         return False
 
-    # Initialize a record in the 'records' table with zeroed scores.
-    cursor.execute(
-        "INSERT INTO records (password, fullname, email, as1, as2, as3, as4, quiz1, quiz2, total) VALUES (?, ?, ?, 0, 0, 0, 0, 0, 0, 0)",
-        (password, fullname, email)
-    )
-    conn.commit()
     conn.close()
     return True
 
@@ -87,7 +80,7 @@ def login_user(username, password):
     conn.close()
     
     if user:
-        approved = user[5]  # Assuming 6th column is 'approved'
+        approved = user[5]  # 6th column is 'approved'
         if approved != 1:
             return "not_approved"
     return user
