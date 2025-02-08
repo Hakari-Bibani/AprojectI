@@ -35,7 +35,7 @@ def show_sidebar():
     with st.sidebar:
         # Display logo above the sidebar content.
         # Update "logo.jpg" with the correct path to your image file.
-        st.image("logo.jpg", use_column_width=True)
+        st.image("logo.jpg", use_container_width=True)
 
         # Home section
         with st.expander("🏠 HOME", expanded=False):
