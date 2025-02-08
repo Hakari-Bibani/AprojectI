@@ -1,7 +1,7 @@
 import streamlit as st
 
 def show_sidebar():
-    # Custom CSS for the sidebar styling with animated title (unused now)
+    # Custom CSS for the sidebar styling
     st.markdown("""
         <style>
         /* Sidebar styling */
@@ -9,7 +9,7 @@ def show_sidebar():
             padding: 2rem 1rem;
         }
         
-        /* (Unused) Title animation and styling */
+        /* (Unused animated title styling removed from display) */
         .sidebar-title {
             background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
             background-size: 200% 200%;
@@ -59,16 +59,18 @@ def show_sidebar():
         """, unsafe_allow_html=True)
 
     with st.sidebar:
-        # Replace the text title with your logo image.
-        # Make sure "logo.jpg" is in the same folder or update the path accordingly.
+        # Display the logo above the sidebar (ensure "logo.jpg" is in the same directory or adjust the path)
         st.image("logo.jpg", use_column_width=True)
+        
+        # The animated title is removed.
+        # st.markdown('<div class="sidebar-title">AI For Impact</div>', unsafe_allow_html=True)
 
         # Home section
         with st.expander("🏠 HOME", expanded=False):
             if st.button("Home Page", key="home", use_container_width=True):
                 st.session_state["page"] = "home"
 
-        # Modules section
+        # Modules section (moved to be directly after HOME)
         with st.expander("📘 MODULES", expanded=False):
             if st.button("Introduction", key="modules_intro", use_container_width=True):
                 st.session_state["page"] = "modules_intro"
