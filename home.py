@@ -178,7 +178,7 @@ def show_home():
             {svg_code}
         </div>
         """,
-        height=490,
+        height=500,
     )
 
     # Footer Messages
