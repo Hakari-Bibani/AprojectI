@@ -1,5 +1,3 @@
-
-# github_sync.py
 import requests
 import base64
 import streamlit as st
@@ -21,7 +19,6 @@ def pull_db_from_github(db_file: str):
     response = requests.get(url, headers=headers)
     
     if response.status_code == 200:
-        # File exists in GitHub
         content = response.json().get("content", "")
         if content:
             decoded = base64.b64decode(content)
@@ -41,8 +38,14 @@ def push_db_to_github(db_file: str):
     repo = st.secrets["general"]["repo"]
     token = st.secrets["general"]["token"]
     
-    with open(db_file, "rb") as f:
-        content = f.read()
+    # Read the local database file and encode it in base64
+    try:
+        with open(db_file, "rb") as f:
+            content = f.read()
+    except Exception as e:
+        print(f"Error reading {db_file}: {e}")
+        return
+
     encoded_content = base64.b64encode(content).decode("utf-8")
     
     url = f"https://api.github.com/repos/{repo}/contents/{db_file}"
@@ -51,14 +54,28 @@ def push_db_to_github(db_file: str):
         "Accept": "application/vnd.github.v3+json"
     }
     
+    # Get the existing file's information to obtain the current sha
     get_response = requests.get(url, headers=headers)
-    sha = get_response.json()["sha"] if get_response.status_code == 200 else None
+    try:
+        get_data = get_response.json()
+    except Exception as e:
+        print("Error decoding GET response JSON:", e)
+        get_data = {}
+    sha = get_data.get("sha", None)
+    print("Existing file SHA:", sha)
     
-    data = {"message": "Update mydatabase.db", "content": encoded_content}
+    # Prepare the data payload for the PUT request
+    data = {
+        "message": "Update database file with new assignment grade",
+        "content": encoded_content
+    }
     if sha:
         data["sha"] = sha
-    
+
+    # Execute the PUT request to update the file on GitHub
     put_response = requests.put(url, json=data, headers=headers)
+    print("PUT response status:", put_response.status_code)
+    print("PUT response text:", put_response.text)
     if put_response.status_code in [200, 201]:
         print("Database pushed to GitHub successfully.")
     else:
