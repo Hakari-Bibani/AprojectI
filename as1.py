@@ -12,7 +12,7 @@ def show():
     # Apply the custom page style
     set_page_style()
 
-    # Initialize session state variables
+    # Initialize session state variables if they don't exist
     if "run_success" not in st.session_state:
         st.session_state["run_success"] = False
     if "map_object" not in st.session_state:
@@ -21,14 +21,12 @@ def show():
         st.session_state["dataframe_object"] = None
     if "captured_output" not in st.session_state:
         st.session_state["captured_output"] = ""
-    
-    # For this example, ensure a username exists in session state.
-    # In your application, you should set this when the user logs in.
     if "username" not in st.session_state:
-        st.session_state["username"] = "testuser"  # Replace with your actual unique user value
+        # For testing purposes; replace with your own user identification mechanism
+        st.session_state["username"] = "testuser"
 
     # Define the database path
-    db_path = 'database.db'  # or use st.secrets["general"]["db_path"] if that's how you store it
+    db_path = 'database.db'  # Or use st.secrets["general"]["db_path"] if applicable
 
     st.title("Assignment 1: Mapping Coordinates and Calculating Distances")
 
@@ -41,53 +39,43 @@ def show():
     with tab1:
         st.markdown("""
             ### Objective
-            In this assignment, you will write a Python script to plot three geographical coordinates on a map and calculate the distance between each pair of points in kilometers. This will help you practice working with geospatial data and Python libraries for mapping and calculations.
+            In this assignment, you will write a Python script to plot three geographical coordinates on a map and calculate the distance between each pair of points in kilometers.
             
             **Assignment: Week 1 – Mapping Coordinates and Calculating Distances in Python**
-            - **Plot the Three Coordinates on a Map:** The coordinates represent three locations in the Kurdistan Region.
-            - **Calculate the Distance Between Each Pair of Points:** Specifically, calculate:
-                - Point 1 to Point 2
-                - Point 2 to Point 3
-                - Point 1 to Point 3
-            """)
+            - **Plot the Three Coordinates on a Map:** Display the locations on a map.
+            - **Calculate Distances:** Compute the distances between the points.
+        """)
         with st.expander("See More"):
             st.markdown("""
             **Task Requirements:**
-            1. **Plot the Three Coordinates on a Map:**  
-               Use Python libraries to plot the points and display their locations on an interactive map.
-            2. **Calculate the Distance Between Each Pair of Points:**  
-               Calculate the distances in kilometers using libraries like `geopy`.
-            3. **Display a Summary:**  
-               Show the calculated distances (formatted to two decimal places) and the map with markers, polylines, and popups.
+            1. Plot the three coordinates.
+            2. Calculate the distances between:
+                - Point 1 and Point 2,
+                - Point 2 and Point 3,
+                - Point 1 and Point 3.
+            3. Display a map with markers, polylines, and popups.
+            4. Provide a summary of the calculated distances (formatted to two decimals).
             """)
-    
+
     with tab2:
         st.markdown("""
             ### Detailed Grading Breakdown
             #### 1. Code Structure and Implementation (30 points)
-            - **Library Imports:** (5 points)
-            - **Coordinate Handling:** (5 points)
-            - **Code Execution:** (10 points)
-            - **Code Quality:** (10 points)
-            """)
-        with st.expander("See More"):
-            st.markdown("""
+            - Library Imports, Coordinate Handling, Code Execution, and Code Quality.
             #### 2. Map Visualization (40 points)
-            - **Map Generation:** (15 points)
-            - **Markers:** (15 points)
-            - **Polylines and Popups:** (10 points)
-            
+            - Map Generation, Markers, Polylines, and Popups.
             #### 3. Distance Calculations (30 points)
-            - **Geodesic Implementation:** (10 points)
-            - **Distance Accuracy:** (20 points)
-            """)
+            - Geodesic Implementation and Distance Accuracy.
+        """)
+        with st.expander("See More"):
+            st.markdown("Detailed instructions here...")
 
     # ─────────────────────────────────────────────────────────────────
     # STEP 3: RUN AND SUBMIT YOUR CODE
     # ─────────────────────────────────────────────────────────────────
     st.markdown('<h1 style="color: #ADD8E6;">Step 3: Run and Submit Your Code</h1>', unsafe_allow_html=True)
     st.markdown('<p style="color: white;">📝 Paste Your Code Here</p>', unsafe_allow_html=True)
-    code_input = st.text_area("", height=300)  # User pastes their code here
+    code_input = st.text_area("", height=300)
 
     # Run Code Button
     run_button = st.button("Run Code", key="run_code_button")
@@ -143,28 +131,37 @@ def show():
             st.markdown("### 📊 DataFrame Output")
             st.dataframe(st.session_state["dataframe_object"])
 
-    # Submit Code Button and Database Update
+    # ─────────────────────────────────────────────────────────────────
+    # SUBMIT CODE BUTTON AND DATABASE UPDATE
+    # ─────────────────────────────────────────────────────────────────
     submit_button = st.button("Submit Code", key="submit_code_button")
     if submit_button:
         if not st.session_state.get("run_success", False):
             st.error("Please run your code successfully before submitting.")
         else:
-            # Grade the submission
+            # Grade the submission using grade_assignment from grade1.py
             from grades.grade1 import grade_assignment
             grade = grade_assignment(code_input)
 
-            # Connect to the database and update the as1 grade for the current user
-            conn = sqlite3.connect(db_path)
-            cursor = conn.cursor()
-            # Update the as1 column for the user whose username matches
-            cursor.execute("UPDATE users SET as1 = ? WHERE username = ?", (grade, st.session_state["username"]))
-            conn.commit()
-            conn.close()
+            try:
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
 
-            # Push the updated DB to GitHub
-            push_db_to_github(db_path)
+                # Check if the 'users' table exists
+                cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='users'")
+                if not cursor.fetchone():
+                    st.error("The table 'users' does not exist in the database. Please check your database schema.")
+                else:
+                    # Update the as1 column for the user with the matching username.
+                    cursor.execute("UPDATE users SET as1 = ? WHERE username = ?", (grade, st.session_state["username"]))
+                    conn.commit()
+                    st.success(f"Submission successful! Your grade: {grade}/100")
+                conn.close()
 
-            st.success(f"Submission successful! Your grade: {grade}/100")
+                # Push the updated DB to GitHub
+                push_db_to_github(db_path)
+            except Exception as e:
+                st.error(f"Database update error: {e}")
 
 if __name__ == "__main__":
     show()
