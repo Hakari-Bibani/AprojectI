@@ -31,26 +31,25 @@ def show():
         """)
     
     with tab3:
-        # Use st.markdown with HTML/CSS for the pale orange title
+        # Title with custom styling
         st.markdown(
             "<h1 style='color: #FFD3A3;'>Stay Connected: Join Our Discord Server!</h1>", 
             unsafe_allow_html=True
         )
-    
-    st.markdown("""
-    **Enhance your learning experience by joining our Discord server**, a dedicated space for collaboration, support, and community engagement.
+        # Discord server invitation content now inside tab3
+        st.markdown("""
+        **Enhance your learning experience by joining our Discord server**, a dedicated space for collaboration, support, and community engagement.
 
-    ## Why Join Our Discord Server?
-    * **Stay Updated:** Get instant updates about the course, assignments, and materials.
-    * **Connect with Peers:** Engage with fellow learners, ask questions, and share your progress.
-    * **Exclusive Opportunities:** Be the first to know about new projects, learning resources, and events.
-    * **Direct Support:** Reach out for help from the instructor or peers in real-time.
+        ## Why Join Our Discord Server?
+        * **Stay Updated:** Get instant updates about the course, assignments, and materials.
+        * **Connect with Peers:** Engage with fellow learners, ask questions, and share your progress.
+        * **Exclusive Opportunities:** Be the first to know about new projects, learning resources, and events.
+        * **Direct Support:** Reach out for help from the instructor or peers in real-time.
 
-    Discord is a powerful platform for building an active learning community. It's simple to use and ensures you're always in the loop.
+        Discord is a powerful platform for building an active learning community. It's simple to use and ensures you're always in the loop.
 
-    ## Join Now
-    Become part of the conversation today! 
+        ## Join Now
+        Become part of the conversation today! 
 
-    **Discord Invite Link:** [Click to Join](https://discord.gg/JnybQncM)
-    """)
-
+        **Discord Invite Link:** [Click to Join](https://discord.gg/JnybQncM)
+        """)
