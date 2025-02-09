@@ -2,9 +2,6 @@ import streamlit as st
 import pandas as pd
 
 def show():
-    # Removed: st.title("Week 1: Introduction to Coding")
-    # Removed: st.write("This week covers the basics of coding.  ...")
-
     # Create tabs
     tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11 = st.tabs([
         "Introduction to Python",
@@ -372,11 +369,10 @@ print(f"The average temperature in {city} is {average_temp}°F.")
         st.header("Quiz: Week 1")
         st.markdown('<p style="color: red; font-size: 20px;">📝 Select Quiz 1 from the sidebar in the Quizzes section.</p>', unsafe_allow_html=True)
 
-    # Removed: These tabs don't exist in the specification
-    # with tab12:
-    #     st.write("Content for Tab 12")
-    # with tab13:
-    #     st.write("Content for Tab 13")
+    with tab12:
+        st.write("Content for Tab 12")
+    with tab13:
+        st.write("Content for Tab 13")
 
 if __name__ == "__main__":
     show()
