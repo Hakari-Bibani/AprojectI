@@ -48,6 +48,7 @@ def show():
         st.write(
             "Python is a powerful, high-level programming language known for its readability and versatility. Used in everything from web "
             "development to scientific research, Python's syntax is clean and intuitive, making it a preferred language for both beginners and experts. "
+            
             "Here’s why Python is ideal for learning:"
         )
         st.markdown("* **Ease of Learning**: Python's syntax closely resembles human language, making it straightforward to pick up even if you're new to coding.")
