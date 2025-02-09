@@ -95,11 +95,11 @@ def show():
 
             **Expected Output:**
             1. A map showing the three coordinates.
-            2. A text summary (Express values to two decimal places.): showing the calculated distances (in kilometers) between:
+            2. A text summary (express values to two decimal places) showing the calculated distances (in kilometers) between:
                - Point 1 and Point 2.
                - Point 2 and Point 3.
                - Point 1 and Point 3.
-            """)
+                """)
 
         with tab2:
             st.markdown("""
@@ -116,7 +116,7 @@ def show():
                 - **Spacing:** 2 points (deducted if improper spacing is found, e.g., no space after =).
                 - **Comments:** 2 points (deducted if no comments are present).
                 - **Code Organization:** 2 points (deducted if no blank lines are used for separation).
-            """)
+                """)
             with st.expander("See More"):
                 st.markdown("""
             #### 2. Map Visualization (40 points)
@@ -134,14 +134,14 @@ def show():
                 - Checks if the geodesic function is used correctly to calculate distances.
             - **Distance Accuracy (20 points):**
                 - Checks if the calculated distances are accurate within a 100-meter tolerance.
-            """)
+                """)
 
         # ─────────────────────────────────────────────────────────────────
         # STEP 3: RUN AND SUBMIT YOUR CODE
         # ─────────────────────────────────────────────────────────────────
         st.markdown('<h1 style="color: #ADD8E6;">Step 3: Run and Submit Your Code</h1>', unsafe_allow_html=True)
         st.markdown('<p style="color: white;">📝 Paste Your Code Here</p>', unsafe_allow_html=True)
-        code_input = st.text_area("", height=300)  # Removed label since we're using custom markdown above
+        code_input = st.text_area("", height=300)
 
         # Run Code Button
         run_button = st.button("Run Code", key="run_code_button")
@@ -180,11 +180,10 @@ def show():
                 sys.stdout = sys.__stdout__
                 st.error(f"An error occurred while running your code: {e}")
 
-        # Display Outputs
+        # Display Outputs if code run successfully
         if st.session_state["run_success"]:
             st.markdown('<h3 style="color: white;">📄 Captured Output</h3>', unsafe_allow_html=True)
             if st.session_state["captured_output"]:
-                # Format the output with preserved whitespace and line breaks
                 formatted_output = st.session_state["captured_output"].replace('\n', '<br>')
                 st.markdown(f'<pre style="color: white; white-space: pre-wrap; word-wrap: break-word;">{formatted_output}</pre>', unsafe_allow_html=True)
             else:
@@ -213,13 +212,17 @@ def show():
                 cursor = conn.cursor()
                 cursor.execute("UPDATE users SET as1 = ? WHERE username = ?", (grade, st.session_state["username"]))
                 conn.commit()
-                # Re-query to confirm the new grade
-                cursor.execute("SELECT as1 FROM users WHERE username = ?", (st.session_state["username"],))
-                new_grade = cursor.fetchone()[0]
                 conn.close()
 
                 # Push the updated DB to GitHub
                 push_db_to_github(db_path)
+
+                # Re-open connection to re-query the updated grade
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("SELECT as1 FROM users WHERE username = ?", (st.session_state["username"],))
+                new_grade = cursor.fetchone()[0]
+                conn.close()
 
                 st.success(f"Submission successful! Your grade: {new_grade}/100")
             else:
