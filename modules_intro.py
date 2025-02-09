@@ -36,14 +36,15 @@ def show():
     with tab3:
         # Title with custom styling
         st.markdown(
-            "<h1 style='color: #FFD3A3;'>Stay Connected: Join Our Discord Server!</h1>", 
+            "<h1 style='color: #FFD700;'>Stay Connected: Join Our Discord Server!</h1>", 
             unsafe_allow_html=True
         )
         # Discord server invitation content now inside tab3
         st.markdown("""
+        <h2 style='color: #ADD8E6;'>Why Join Our Discord Server?</h2>
+
         **Enhance your learning experience by joining our Discord server**, a dedicated space for collaboration, support, and community engagement.
 
-        ## Why Join Our Discord Server?
         * **Stay Updated:** Get instant updates about the course, assignments, and materials.
         * **Connect with Peers:** Engage with fellow learners, ask questions, and share your progress.
         * **Exclusive Opportunities:** Be the first to know about new projects, learning resources, and events.
@@ -51,8 +52,9 @@ def show():
 
         Discord is a powerful platform for building an active learning community. It's simple to use and ensures you're always in the loop.
 
-        ## Join Now
+        <h2 style='color: #ADD8E6;'>Join Now</h2>
+
         Become part of the conversation today! 
 
         **Discord Invite Link:** [Click to Join](https://discord.gg/JnybQncM)
-        """)
+        """, unsafe_allow_html=True)
