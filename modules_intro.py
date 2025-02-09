@@ -34,15 +34,20 @@ def show():
         """, unsafe_allow_html=True)
     
     with tab3:
-        # Title with custom styling
+        # Title with custom styling (Yellow)
         st.markdown(
             "<h1 style='color: #FFD700;'>Stay Connected: Join Our Discord Server!</h1>", 
             unsafe_allow_html=True
         )
-        # Discord server invitation content
-        st.markdown("""
-        <span style='color: #ADD8E6; font-size: 24px; font-weight: bold;'>Why Join Our Discord Server?</span>
+        
+        # "Why Join Our Discord Server?" in Pale Blue
+        st.markdown(
+            "<div style='color: #ADD8E6; font-weight: bold; font-size: 24px;'>Why Join Our Discord Server?</div>",
+            unsafe_allow_html=True
+        )
 
+        # Discord Information
+        st.markdown("""
         **Enhance your learning experience by joining our Discord server**, a dedicated space for collaboration, support, and community engagement.
 
         * **Stay Updated:** Get instant updates about the course, assignments, and materials.
@@ -52,10 +57,16 @@ def show():
 
         Discord is a powerful platform for building an active learning community. It's simple to use and ensures you're always in the loop.
 
-        <br>
+        """, unsafe_allow_html=True)
 
-        <span style='color: #ADD8E6; font-size: 24px; font-weight: bold;'>Join Now</span>
+        # "Join Now" in Pale Blue
+        st.markdown(
+            "<div style='color: #ADD8E6; font-weight: bold; font-size: 24px;'>Join Now</div>",
+            unsafe_allow_html=True
+        )
 
+        # Discord Invite Link
+        st.markdown("""
         Become part of the conversation today! 
 
         **Discord Invite Link:** [Click to Join](https://discord.gg/JnybQncM)
