@@ -6,7 +6,6 @@ def show():
     
     with tab1: 
         st.markdown("<h1 style='color: gold;'>Welcome</h1>", unsafe_allow_html=True)
-        st.write("Welcome to the introduction module. Here you'll get an overview of the course and what to expect.")
         # Embed YouTube video
         st.video("https://www.youtube.com/watch?v=G8BC2NIfpAs")
     
