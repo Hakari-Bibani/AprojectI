@@ -213,11 +213,14 @@ def show():
                 cursor = conn.cursor()
                 cursor.execute("UPDATE users SET as1 = ? WHERE username = ?", (grade, st.session_state["username"]))
                 conn.commit()
+                # Re-query to confirm the new grade
+                cursor.execute("SELECT as1 FROM users WHERE username = ?", (st.session_state["username"],))
+                new_grade = cursor.fetchone()[0]
                 conn.close()
 
                 # Push the updated DB to GitHub
                 push_db_to_github(db_path)
 
-                st.success(f"Submission successful! Your grade: {grade}/100")
+                st.success(f"Submission successful! Your grade: {new_grade}/100")
             else:
                 st.error("Please enter your username to submit.")
