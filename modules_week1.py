@@ -73,7 +73,8 @@ def show():
         st.subheader("**More References**")
         st.markdown("[GeeksforGeeks – Python Applications in Real World](https://www.geeksforgeeks.org/python-applications-in-real-world/)")
         st.markdown("[Bocasay – 7 Applications of Python Programming](https://www.bocasay.com/7-applications-python-programming/)")
-        st.markdown("[Trio – Python Applications](https://trio.dev/python-applications/)")
+        st.markdown("[Trio – Python Applications](https://trio.dev/python-applications/)"
+        )
 
     with tab4:
         st.header("1.4 What is in the Python Script?")
