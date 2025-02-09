@@ -10,13 +10,17 @@ def show():
         st.video("https://www.youtube.com/watch?v=G8BC2NIfpAs")
     
     with tab2:
-        st.markdown("<h1 style='color: gold;'>Course Instructions</h1>", unsafe_allow_html=True)
-        st.markdown("""
-        This course is designed to span **5 weeks**, structured to provide you with a comprehensive learning and hands-on experience:
+    st.markdown("<h1 style='color: gold;'>Course Instructions</h1>", unsafe_allow_html=True)
+    st.markdown("""
+    This course is designed to span **5 weeks**, structured to provide you with a comprehensive learning and hands-on experience:
 
-        * **Weeks 1–3:** Focus on learning foundational concepts and developing your Python skills through tutorials, assignments, and guided exercises.
-        * **Weeks 4–5:** Dedicated to working on your personalized project, applying what you've learned to create a meaningful and impactful application.
-
+    * **Weeks 1–3:** Focus on learning foundational concepts and developing your Python skills through tutorials, assignments, and guided exercises.
+    * **Weeks 4–5:** Dedicated to working on your personalized project, applying what you've learned to create a meaningful and impactful application.
+    """)
+    
+    # Wrap the following content in a div with the custom class
+    st.markdown("""
+    <div class="custom-heading">
         ## Weekly Structure
         1. Each week begins with a **video tutorial** that introduces the core concepts.
         2. Follow up with related materials, assignments, and discussions to deepen your understanding.
@@ -28,7 +32,9 @@ def show():
         ## Assignment Submission:
         * Submit assignments promptly and ensure all required files and links are included.
         * **For Google Colab projects**, ensure they are **set to public** so your peers and the instructor can access and review them.
-        """)
+    </div>
+    """, unsafe_allow_html=True)
+
     
     with tab3:
         # Title with custom styling
