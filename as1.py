@@ -12,7 +12,7 @@ def show():
     # Apply the custom page style
     set_page_style()
 
-    # Initialize session state variables if they don't exist yet.
+    # Initialize session state variables
     if "run_success" not in st.session_state:
         st.session_state["run_success"] = False
     if "map_object" not in st.session_state:
@@ -22,27 +22,15 @@ def show():
     if "captured_output" not in st.session_state:
         st.session_state["captured_output"] = ""
 
-    # --------------------------------------------------------------------------
-    # User Identification:
-    # For a multi-user environment, this should be set during login.
-    # For testing purposes, you can either prompt for the username or set it from your secrets.
-    # Uncomment the following line if you want to use the secrets value:
-    # if "username" not in st.session_state:
-    #     st.session_state["username"] = st.secrets["general"].get("username")
-    
-    # Alternatively, prompt the user for their username:
-    if "username" not in st.session_state or not st.session_state["username"]:
-        st.session_state["username"] = st.text_input("Enter your username:", key="login_username")
-    
-    # Define db_path from secrets.
+    # Define db_path globally
     db_path = st.secrets["general"]["db_path"]
 
     st.title("Assignment 1: Mapping Coordinates and Calculating Distances")
 
     # ─────────────────────────────────────────────────────────────────
-    # STEP 2: REVIEW ASSIGNMENT DETAILS
+    # STEP 1: REVIEW ASSIGNMENT DETAILS
     # ─────────────────────────────────────────────────────────────────
-    st.markdown('<h1 style="color: #ADD8E6;">Step 2: Review Assignment Details</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 style="color: #ADD8E6;">Step 1: Review Assignment Details</h1>', unsafe_allow_html=True)
     tab1, tab2 = st.tabs(["Assignment Details", "Grading Details"])
 
     with tab1:
@@ -83,11 +71,11 @@ def show():
 
         **Expected Output:**
         1. A map showing the three coordinates.
-        2. A text summary (expressed to two decimal places) showing the calculated distances (in kilometers) between:
+        2. A text summary (Express values to two decimal places.): showing the calculated distances (in kilometers) between:
            - Point 1 and Point 2.
            - Point 2 and Point 3.
            - Point 1 and Point 3.
-            """)
+        """)
 
     with tab2:
         st.markdown("""
@@ -125,11 +113,11 @@ def show():
         """)
 
     # ─────────────────────────────────────────────────────────────────
-    # STEP 3: RUN AND SUBMIT YOUR CODE
+    # STEP 2: RUN AND SUBMIT YOUR CODE
     # ─────────────────────────────────────────────────────────────────
-    st.markdown('<h1 style="color: #ADD8E6;">Step 3: Run and Submit Your Code</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 style="color: #ADD8E6;">Step 2: Run and Submit Your Code</h1>', unsafe_allow_html=True)
     st.markdown('<p style="color: white;">📝 Paste Your Code Here</p>', unsafe_allow_html=True)
-    code_input = st.text_area("", height=300)
+    code_input = st.text_area("", height=300)  # Removed label since we're using custom markdown above
 
     # Run Code Button
     run_button = st.button("Run Code", key="run_code_button")
@@ -147,8 +135,10 @@ def show():
             local_context = {}
             exec(code_input, {}, local_context)
 
-            # Restore stdout and capture output
+            # Restore stdout
             sys.stdout = sys.__stdout__
+
+            # Capture printed output
             st.session_state["captured_output"] = captured_output.getvalue()
 
             # Look for specific outputs (folium.Map, pandas.DataFrame)
@@ -170,6 +160,7 @@ def show():
     if st.session_state["run_success"]:
         st.markdown('<h3 style="color: white;">📄 Captured Output</h3>', unsafe_allow_html=True)
         if st.session_state["captured_output"]:
+            # Format the output with preserved whitespace and line breaks
             formatted_output = st.session_state["captured_output"].replace('\n', '<br>')
             st.markdown(f'<pre style="color: white; white-space: pre-wrap; word-wrap: break-word;">{formatted_output}</pre>', unsafe_allow_html=True)
         else:
@@ -193,20 +184,20 @@ def show():
             from grades.grade1 import grade_assignment
             grade = grade_assignment(code_input)
 
-            # Retrieve the current user's username from session state.
-            username = st.session_state.get("username")
-            if not username:
-                st.error("Username not found. Please log in first.")
-                return
+            # Update the grade in the users table for the current user
+            username = st.session_state.get("username")  # Retrieve username from session state
+            if username:
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
 
-            # Update the grade in the users table for the current user.
-            conn = sqlite3.connect(db_path)
-            cursor = conn.cursor()
-            cursor.execute("UPDATE users SET as1 = ? WHERE username = ?", (grade, username))
-            conn.commit()
-            conn.close()
+                # Update the as1 grade for the user
+                cursor.execute("UPDATE users SET as1 = ? WHERE username = ?", (grade, username))
+                conn.commit()
+                conn.close()
 
-            # Push the updated DB to GitHub.
-            push_db_to_github(db_path)
+                # Push the updated DB to GitHub
+                push_db_to_github(db_path)
 
-            st.success(f"Submission successful! Your grade: {grade}/100")
+                st.success(f"Submission successful! Your grade: {grade}/100")
+            else:
+                st.error("Username not found. Please log in again.")
