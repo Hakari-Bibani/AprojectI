@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 
 def show():
-    # Create tabs
-    tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11, tab12, tab13 = st.tabs([
+    # Create 11 tabs (removing undefined tab12 and tab13)
+    tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11 = st.tabs([
         "Introduction to Python",
         "You made it!",
         "What is Python?",
@@ -28,16 +28,6 @@ def show():
             "whether you're looking to automate tasks, analyze data, or create small projects. We will cover foundational topics such as "
             "setting up your Python environment, understanding Python syntax, and exploring the practical applications of Python in everyday scenarios."
         )
-    st.markdown("<h2 style='color: #FFE5B4;'>1.1 Introduction to Python - Recorded Session</h2>", unsafe_allow_html=True)
-    st.video("https://www.youtube.com/watch?v=Scem9sKTtJo")
-    st.subheader("**ChatGPT Prompts**")
-    st.markdown("[Links to an external site](https://chatgpt.com/share/6733c214-7ac4-8004-92f1-227d11b644ff)")
-    st.subheader("**Content**:")
-    st.write(
-        "In this session, we'll introduce you to the basics of Python and how it can be a powerful tool for enhancing personal impact, "
-        "whether you're looking to automate tasks, analyze data, or create small projects. We will cover foundational topics such as "
-        "setting up your Python environment, understanding Python syntax, and exploring the practical applications of Python in everyday scenarios."
-    )
 
     with tab2:
         st.header("1.2 You made it! Be prepared for your final project")
@@ -48,7 +38,6 @@ def show():
         st.write(
             "Python is a powerful, high-level programming language known for its readability and versatility. Used in everything from web "
             "development to scientific research, Python's syntax is clean and intuitive, making it a preferred language for both beginners and experts. "
-            
             "Here’s why Python is ideal for learning:"
         )
         st.markdown("* **Ease of Learning**: Python's syntax closely resembles human language, making it straightforward to pick up even if you're new to coding.")
@@ -73,8 +62,7 @@ def show():
         st.subheader("**More References**")
         st.markdown("[GeeksforGeeks – Python Applications in Real World](https://www.geeksforgeeks.org/python-applications-in-real-world/)")
         st.markdown("[Bocasay – 7 Applications of Python Programming](https://www.bocasay.com/7-applications-python-programming/)")
-        st.markdown("[Trio – Python Applications](https://trio.dev/python-applications/)"
-        )
+        st.markdown("[Trio – Python Applications](https://trio.dev/python-applications/)")
 
     with tab4:
         st.header("1.4 What is in the Python Script?")
@@ -98,16 +86,20 @@ def show():
 # 1. Importing Libraries
 import pandas as pd  # This library helps manage and analyze data in tables
 import matplotlib.pyplot as plt  # This library helps create visualizations like charts
+
 # 2. Defining Variables
 data = {'Temperature': [70, 75, 80, 85, 90], 'Humidity': [30, 45, 50, 60, 70]}  # Creating sample data
 city = "Kurdistan"  # Name of the location for the data
+
 # 3. Creating a DataFrame and Calculating the Average Temperature
 df = pd.DataFrame(data)  # Convert the data dictionary into a table
 average_temp = df['Temperature'].mean()  # Calculate the average temperature
+
 # 4. Loop through Data to Print Each Temperature
 print(f"Weather data for {city}:")
 for temp in df['Temperature']:
     print(f"- Temperature: {temp}°F")
+
 # 5. Visualize Data: Plotting Temperature and Humidity
 plt.plot(df['Temperature'], label='Temperature', color='red')
 plt.plot(df['Humidity'], label='Humidity', color='blue')
@@ -116,6 +108,7 @@ plt.ylabel('Value')
 plt.title(f"Weather Data for {city}")
 plt.legend()
 plt.show()
+
 # 6. Output the Result
 print(f"The average temperature in {city} is {average_temp}°F.")
             """,
@@ -286,7 +279,6 @@ print(f"The average temperature in {city} is {average_temp}°F.")
 
     with tab8:
         st.header("1.8 Understanding APIs: The Key to Real-Time Data Integration")
-
         st.markdown("<h3 style='color: goldenrod;'>What is an API?</h3>", unsafe_allow_html=True)
         st.write(
             "An API (Application Programming Interface) is a set of rules and protocols that allows different software applications "
@@ -294,7 +286,6 @@ print(f"The average temperature in {city} is {average_temp}°F.")
             "from another. APIs define how requests for information or actions are made, the format of these requests, and the expected responses, "
             "allowing applications to interact without needing to understand the inner workings of each other."
         )
-
         st.markdown("<h3 style='color: goldenrod;'>Why is an API Important?</h3>", unsafe_allow_html=True)
         st.write(
             "APIs are crucial because they enable software systems to share data and functionality, which is especially useful for developers "
@@ -302,7 +293,6 @@ print(f"The average temperature in {city} is {average_temp}°F.")
             "This ability to pull in real-time data from other platforms, or let users perform specific tasks from different systems without leaving "
             "the primary application, enhances user experiences and broadens application capabilities."
         )
-
         st.markdown("<h3 style='color: goldenrod;'>How is an API Used? (Example)</h3>", unsafe_allow_html=True)
         st.write(
             "To use an API, you usually send a request to an endpoint URL with specific parameters that define what data or action you’re interested in. "
@@ -320,7 +310,6 @@ print(f"The average temperature in {city} is {average_temp}°F.")
             "When a request is sent with the filled-in parameters, the API returns data, often in JSON format, containing details about all recorded "
             "earthquakes within that time range. Each record includes information such as location, magnitude, depth, and time."
         )
-
         st.markdown("<h3 style='color: goldenrod;'>Why Use an API Like the USGS Earthquake API?</h3>", unsafe_allow_html=True)
         st.write(
             "Using APIs like the USGS Earthquake API allows developers to pull in constantly updated earthquake data directly into their applications "
@@ -338,7 +327,6 @@ print(f"The average temperature in {city} is {average_temp}°F.")
             "Google Colab is a powerful cloud-based platform that enables researchers, students, and professionals to execute Python code directly in their browsers. "
             "Its versatility makes it a valuable tool for solving real-world problems in various fields. Below are some fascinating real-time applications of Google Colab:"
         )
-
         st.markdown(
             "• **Real-Time Voice Cloning:** Using pre-trained models, users can clone voices from audio samples and generate new speech. "
             "This is helpful in personalized speech synthesis and assistive technologies. "
@@ -370,11 +358,6 @@ print(f"The average temperature in {city} is {average_temp}°F.")
     with tab11:
         st.header("Quiz: Week 1")
         st.markdown('<p style="color: red; font-size: 20px;">📝 Select Quiz 1 from the sidebar in the Quizzes section.</p>', unsafe_allow_html=True)
-
-    with tab12:
-        st.write("Content for Tab 12")
-    with tab13:
-        st.write("Content for Tab 13")
 
 if __name__ == "__main__":
     show()
