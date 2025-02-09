@@ -185,10 +185,10 @@ def show():
             grade = grade_assignment(code_input)
 
             # Update the grade in the users table for this submission.
-            # Each submission will overwrite the previous grade.
+            # Using a WHERE clause to target a single record (rowid = 1).
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
-            cursor.execute("UPDATE users SET as1 = ?", (grade,))
+            cursor.execute("UPDATE users SET as1 = ? WHERE rowid = 1", (grade,))
             conn.commit()
             conn.close()
 
