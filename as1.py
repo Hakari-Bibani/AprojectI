@@ -1,3 +1,4 @@
+# as1.py
 import streamlit as st
 import folium
 import pandas as pd
@@ -6,7 +7,7 @@ from io import StringIO
 from streamlit_folium import st_folium
 from utils.style1 import set_page_style
 import sqlite3
-from github_sync import push_db_to_github
+from github_sync import push_db_to_github, pull_db_from_github
 
 def show():
     # Apply the custom page style
@@ -26,13 +27,14 @@ def show():
     if "username" not in st.session_state:
         st.session_state["username"] = ""
 
-    # Define db_path globally
+    # Define db_path globally and pull the latest database from GitHub
     db_path = st.secrets["general"]["db_path"]
+    pull_db_from_github(db_path)
 
     st.title("Assignment 1: Mapping Coordinates and Calculating Distances")
 
     # ─────────────────────────────────────────────────────────────────
-    # STEP 1: ENTER YOUR USERNAME
+    # STEP 1: ENTER YOUR USERNAME (no password required)
     # ─────────────────────────────────────────────────────────────────
     st.markdown('<h1 style="color: #ADD8E6;">Step 1: Enter Your Username</h1>', unsafe_allow_html=True)
     username_input = st.text_input("Username", key="as1_username")
@@ -169,7 +171,8 @@ def show():
                 st.dataframe(st.session_state["dataframe_object"])
 
         # ─────────────────────────────────────────────────────────────────
-        # SUBMIT CODE BUTTON (updates grade and pushes DB)
+        # SUBMIT CODE BUTTON 
+        # (Users can resubmit at any time; the new grade is saved under as1 in GitHub)
         # ─────────────────────────────────────────────────────────────────
         submit_button = st.button("Submit Code", key="submit_code_button")
         if submit_button:
@@ -191,10 +194,6 @@ def show():
 
                 # Push the updated DB to GitHub
                 push_db_to_github(db_path)
-
-                # (Optional) Add a small delay if necessary to let GitHub update
-                # import time
-                # time.sleep(1)
 
                 # Re-open connection to re-query the updated grade
                 conn = sqlite3.connect(db_path)
