@@ -39,9 +39,9 @@ def show():
             "<h1 style='color: #FFD700;'>Stay Connected: Join Our Discord Server!</h1>", 
             unsafe_allow_html=True
         )
-        # Discord server invitation content now inside tab3
+        # Discord server invitation content
         st.markdown("""
-        <h2 style='color: #ADD8E6;'>Why Join Our Discord Server?</h2>
+        <span style='color: #ADD8E6; font-size: 24px; font-weight: bold;'>Why Join Our Discord Server?</span>
 
         **Enhance your learning experience by joining our Discord server**, a dedicated space for collaboration, support, and community engagement.
 
@@ -52,7 +52,9 @@ def show():
 
         Discord is a powerful platform for building an active learning community. It's simple to use and ensures you're always in the loop.
 
-        <h2 style='color: #ADD8E6;'>Join Now</h2>
+        <br>
+
+        <span style='color: #ADD8E6; font-size: 24px; font-weight: bold;'>Join Now</span>
 
         Become part of the conversation today! 
 
