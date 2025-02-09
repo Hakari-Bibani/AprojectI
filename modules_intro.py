@@ -26,7 +26,7 @@ def show():
         * These sessions are designed to address your queries, provide feedback, and guide you through challenges.
 
         <h2 style='color: #FFD3A3;'>Assignment Submission:</h2>
-        * Submit assignments promptly and ensure all required files and links are included.
+        * **Submit assignments promptly and ensure all required files and links are included.**
         * **For Google Colab projects**, ensure they are **set to public** so your peers and the instructor can access and review them.
         """, unsafe_allow_html=True)
     
