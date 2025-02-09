@@ -264,7 +264,6 @@ print(f"The average temperature in {city} is {average_temp}°F.")
         )
 
     with tab7:
-        with tab7:
         import as1
         as1.show()
 
