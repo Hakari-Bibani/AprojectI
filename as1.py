@@ -28,9 +28,9 @@ def show():
     st.title("Assignment 1: Mapping Coordinates and Calculating Distances")
 
     # ─────────────────────────────────────────────────────────────────
-    # STEP 1: REVIEW ASSIGNMENT DETAILS
+    # STEP 2: REVIEW ASSIGNMENT DETAILS
     # ─────────────────────────────────────────────────────────────────
-    st.markdown('<h1 style="color: #ADD8E6;">Step 1: Review Assignment Details</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 style="color: #ADD8E6;">Step 2: Review Assignment Details</h1>', unsafe_allow_html=True)
     tab1, tab2 = st.tabs(["Assignment Details", "Grading Details"])
 
     with tab1:
@@ -113,9 +113,9 @@ def show():
         """)
 
     # ─────────────────────────────────────────────────────────────────
-    # STEP 2: RUN AND SUBMIT YOUR CODE
+    # STEP 3: RUN AND SUBMIT YOUR CODE
     # ─────────────────────────────────────────────────────────────────
-    st.markdown('<h1 style="color: #ADD8E6;">Step 2: Run and Submit Your Code</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 style="color: #ADD8E6;">Step 3: Run and Submit Your Code</h1>', unsafe_allow_html=True)
     st.markdown('<p style="color: white;">📝 Paste Your Code Here</p>', unsafe_allow_html=True)
     code_input = st.text_area("", height=300)  # Removed label since we're using custom markdown above
 
@@ -184,18 +184,16 @@ def show():
             from grades.grade1 import grade_assignment
             grade = grade_assignment(code_input)
 
-            # Update the grade in the users table for the current user
-            username = st.session_state.get("username")  # Assuming username is stored in session state
-            if username:
-                conn = sqlite3.connect(db_path)
-                cursor = conn.cursor()
-                cursor.execute("UPDATE users SET as1 = ? WHERE username = ?", (grade, username))
-                conn.commit()
-                conn.close()
+            # Update the grade in the users table for the current user.
+            # It is assumed that the current user's username is stored in st.secrets["general"]["username"]
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            username = st.secrets["general"]["username"]
+            cursor.execute("UPDATE users SET as1 = ? WHERE username = ?", (grade, username))
+            conn.commit()
+            conn.close()
 
-                # Push the updated DB to GitHub
-                push_db_to_github(db_path)
+            # Push the updated DB to GitHub
+            push_db_to_github(db_path)
 
-                st.success(f"Submission successful! Your grade: {grade}/100")
-            else:
-                st.error("Username not found. Please log in again.")
+            st.success(f"Submission successful! Your grade: {grade}/100")
