@@ -55,7 +55,7 @@ def show():
              - The distance between Point 1 and Point 2.
              - The distance between Point 2 and Point 3.
              - The distance between Point 1 and Point 3.
-           - Add Markers to the map for each coordinate.
+           - Add markers to the map for each coordinate.
            - Add polylines to connect the points.
            - Add popups to display information about the distance.
 
@@ -117,7 +117,7 @@ def show():
     # ─────────────────────────────────────────────────────────────────
     st.markdown('<h1 style="color: #ADD8E6;">Step 3: Run and Submit Your Code</h1>', unsafe_allow_html=True)
     st.markdown('<p style="color: white;">📝 Paste Your Code Here</p>', unsafe_allow_html=True)
-    code_input = st.text_area("", height=300)  # Removed label since we're using custom markdown above
+    code_input = st.text_area("", height=300)
 
     # Run Code Button
     run_button = st.button("Run Code", key="run_code_button")
@@ -185,10 +185,10 @@ def show():
             grade = grade_assignment(code_input)
 
             # Update the grade in the users table for as1.
-            # (This query updates all rows—adjust the WHERE clause if you need to target a specific user.)
+            # Here we assume a single user with id=1.
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
-            cursor.execute("UPDATE users SET as1 = ?", (grade,))
+            cursor.execute("UPDATE users SET as1 = ? WHERE id = ?", (grade, 1))
             conn.commit()
             conn.close()
 
