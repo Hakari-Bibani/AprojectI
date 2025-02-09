@@ -55,7 +55,7 @@ def show():
              - The distance between Point 1 and Point 2.
              - The distance between Point 2 and Point 3.
              - The distance between Point 1 and Point 3.
-           - Add markers to the map for each coordinate.
+           - Add Markers to the map for each coordinate.
            - Add polylines to connect the points.
            - Add popups to display information about the distance.
 
@@ -71,7 +71,7 @@ def show():
 
         **Expected Output:**
         1. A map showing the three coordinates.
-        2. A text summary (express values to two decimal places) showing the calculated distances (in kilometers) between:
+        2. A text summary (expressed to two decimal places) showing the calculated distances (in kilometers) between:
            - Point 1 and Point 2.
            - Point 2 and Point 3.
            - Point 1 and Point 3.
@@ -117,7 +117,7 @@ def show():
     # ─────────────────────────────────────────────────────────────────
     st.markdown('<h1 style="color: #ADD8E6;">Step 3: Run and Submit Your Code</h1>', unsafe_allow_html=True)
     st.markdown('<p style="color: white;">📝 Paste Your Code Here</p>', unsafe_allow_html=True)
-    code_input = st.text_area("", height=300)
+    code_input = st.text_area("", height=300)  # Removed label since we're using custom markdown above
 
     # Run Code Button
     run_button = st.button("Run Code", key="run_code_button")
@@ -184,10 +184,11 @@ def show():
             from grades.grade1 import grade_assignment
             grade = grade_assignment(code_input)
 
-            # Update the grade in the users table for this submission (resubmission allowed)
+            # Update the grade in the users table for as1.
+            # (This query updates all rows—adjust the WHERE clause if you need to target a specific user.)
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
-            cursor.execute("UPDATE users SET as1 = ? WHERE id = 1", (grade,))
+            cursor.execute("UPDATE users SET as1 = ?", (grade,))
             conn.commit()
             conn.close()
 
