@@ -31,7 +31,7 @@ def show_home():
         unsafe_allow_html=True,
     )
 
-    # Updated SVG code
+    # Render the SVG graphic at the very top using components.html.
     svg_code = """
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
         <defs>
