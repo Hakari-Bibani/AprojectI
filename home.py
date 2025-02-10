@@ -183,8 +183,5 @@ def show_home():
         height=500,
     )
 
-    # Footer Messages
-    st.markdown('<div class="footer footer-assignments">📌 Access Quizzes and Assignments via the Sidebar</div>', unsafe_allow_html=True)
-
-if __name__ == "__main__":
+    if __name__ == "__main__":
     show_home()
