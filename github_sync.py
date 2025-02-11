@@ -1,7 +1,7 @@
+# github_sync.py
 import requests
 import base64
 import streamlit as st
-import os
 
 def pull_db_from_github(db_file: str):
     """
@@ -10,7 +10,8 @@ def pull_db_from_github(db_file: str):
     """
     repo = st.secrets["general"]["repo"]
     token = st.secrets["general"]["token"]
-    url = f"https://api.github.com/repos/{repo}/contents/{db_file}"
+    branch = st.secrets["general"].get("branch", "main")
+    url = f"https://api.github.com/repos/{repo}/contents/{db_file}?ref={branch}"
     headers = {
         "Authorization": f"token {token}",
         "Accept": "application/vnd.github.v3+json"
@@ -37,6 +38,7 @@ def push_db_to_github(db_file: str):
     """
     repo = st.secrets["general"]["repo"]
     token = st.secrets["general"]["token"]
+    branch = st.secrets["general"].get("branch", "main")
     
     # Read the local database file and encode it in base64
     try:
@@ -54,8 +56,9 @@ def push_db_to_github(db_file: str):
         "Accept": "application/vnd.github.v3+json"
     }
     
-    # Get the existing file's information to obtain the current sha
-    get_response = requests.get(url, headers=headers)
+    # Get the existing file's information to obtain the current sha, using the correct branch
+    get_url = f"{url}?ref={branch}"
+    get_response = requests.get(get_url, headers=headers)
     try:
         get_data = get_response.json()
     except Exception as e:
@@ -67,7 +70,8 @@ def push_db_to_github(db_file: str):
     # Prepare the data payload for the PUT request
     data = {
         "message": "Update database file with new assignment grade",
-        "content": encoded_content
+        "content": encoded_content,
+        "branch": branch
     }
     if sha:
         data["sha"] = sha
