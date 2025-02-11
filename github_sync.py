@@ -2,6 +2,7 @@
 import requests
 import base64
 import streamlit as st
+import time
 
 def pull_db_from_github(db_file: str):
     """
@@ -56,8 +57,9 @@ def push_db_to_github(db_file: str):
         "Accept": "application/vnd.github.v3+json"
     }
     
-    # Get the existing file's information to obtain the current sha, using the correct branch
-    get_url = f"{url}?ref={branch}"
+    # To avoid cached GET responses (which might return an old sha),
+    # add a unique query parameter (e.g., current time)
+    get_url = f"{url}?ref={branch}&_={int(time.time())}"
     get_response = requests.get(get_url, headers=headers)
     try:
         get_data = get_response.json()
