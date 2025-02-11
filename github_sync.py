@@ -12,12 +12,14 @@ def pull_db_from_github(db_file: str):
     repo = st.secrets["general"]["repo"]
     token = st.secrets["general"]["token"]
     branch = st.secrets["general"].get("branch", "main")
+    # Use no-cache headers so we get the latest content
     url = f"https://api.github.com/repos/{repo}/contents/{db_file}?ref={branch}"
     headers = {
         "Authorization": f"token {token}",
-        "Accept": "application/vnd.github.v3+json"
+        "Accept": "application/vnd.github.v3+json",
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache"
     }
-
     response = requests.get(url, headers=headers)
     
     if response.status_code == 200:
@@ -52,13 +54,15 @@ def push_db_to_github(db_file: str):
     encoded_content = base64.b64encode(content).decode("utf-8")
     
     url = f"https://api.github.com/repos/{repo}/contents/{db_file}"
+    # Add no-cache headers to force a fresh GET
     headers = {
         "Authorization": f"token {token}",
-        "Accept": "application/vnd.github.v3+json"
+        "Accept": "application/vnd.github.v3+json",
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache"
     }
     
-    # To avoid cached GET responses (which might return an old sha),
-    # add a unique query parameter (e.g., current time)
+    # Add a unique query parameter to bypass any caching issues
     get_url = f"{url}?ref={branch}&_={int(time.time())}"
     get_response = requests.get(get_url, headers=headers)
     try:
