@@ -1,4 +1,4 @@
-# as1.py
+
 import streamlit as st
 import folium
 import pandas as pd
@@ -7,27 +7,16 @@ from io import StringIO
 from streamlit_folium import st_folium
 from utils.style1 import set_page_style
 import sqlite3
-import time
+from github_sync import push_db_to_github
 from github_sync import push_db_to_github, pull_db_from_github
 
 def show():
     # Apply the custom page style
-    set_page_style()
-
-    # Initialize session state variables
-    if "run_success" not in st.session_state:
-        st.session_state["run_success"] = False
-    if "map_object" not in st.session_state:
-        st.session_state["map_object"] = None
-    if "dataframe_object" not in st.session_state:
-        st.session_state["dataframe_object"] = None
-    if "captured_output" not in st.session_state:
-        st.session_state["captured_output"] = ""
-    if "username_entered" not in st.session_state:
-        st.session_state["username_entered"] = False
+@@ -26,183 +27,181 @@
     if "username" not in st.session_state:
         st.session_state["username"] = ""
 
+    # Define db_path globally
     # Define db_path globally and pull the latest database from GitHub
     db_path = st.secrets["general"]["db_path"]
     pull_db_from_github(db_path)
@@ -35,7 +24,8 @@ def show():
     st.title("Assignment 1: Mapping Coordinates and Calculating Distances")
 
     # ─────────────────────────────────────────────────────────────────
-    # STEP 1: ENTER YOUR USERNAME (only username, no password)
+    # STEP 1: ENTER YOUR USERNAME
+    # STEP 1: ENTER YOUR USERNAME (no password required)
     # ─────────────────────────────────────────────────────────────────
     st.markdown('<h1 style="color: #ADD8E6;">Step 1: Enter Your Username</h1>', unsafe_allow_html=True)
     username_input = st.text_input("Username", key="as1_username")
@@ -64,7 +54,6 @@ def show():
             st.markdown("""
             ### Objective
             In this assignment, you will write a Python script to plot three geographical coordinates on a map and calculate the distance between each pair of points in kilometers. This will help you practice working with geospatial data and Python libraries for mapping and calculations.
-
             ### Assignment: Week 1 – Mapping Coordinates and Calculating Distances in Python
             **Objective:**
             Write a script that:
@@ -88,7 +77,6 @@ def show():
             - Point 1: Latitude: 36.325735, Longitude: 43.928414
             - Point 2: Latitude: 36.393432, Longitude: 44.586781
             - Point 3: Latitude: 36.660477, Longitude: 43.840174
-
             **Libraries to Use:**
             - `geopy` (for distance calculations),
             - `folium` (for the interactive map),
@@ -172,7 +160,9 @@ def show():
                 st.dataframe(st.session_state["dataframe_object"])
 
         # ─────────────────────────────────────────────────────────────────
-        # SUBMIT CODE BUTTON (users can resubmit anytime; the new grade is saved under as1 on GitHub)
+        # SUBMIT CODE BUTTON (updates grade and pushes DB)
+        # SUBMIT CODE BUTTON 
+        # (Users can resubmit at any time; the new grade is saved under as1 in GitHub)
         # ─────────────────────────────────────────────────────────────────
         submit_button = st.button("Submit Code", key="submit_code_button")
         if submit_button:
@@ -190,22 +180,14 @@ def show():
                 conn.commit()
                 conn.close()
 
-                st.info("Grade updated locally. Preparing to push changes to GitHub...")
-
-                # Optional: short delay to ensure the local DB file is fully written to disk
-                time.sleep(1)
-
-                # (Optional Debug) Verify the updated grade from the local file
-                conn = sqlite3.connect(db_path)
-                cursor = conn.cursor()
-                cursor.execute("SELECT as1 FROM users WHERE username = ?", (st.session_state["username"],))
-                current_grade = cursor.fetchone()[0]
-                conn.close()
-                st.write("Local grade now is:", current_grade)
+                st.info("Grade updated locally. Pushing changes to GitHub...")
 
                 # Push the updated DB to GitHub
                 push_db_to_github(db_path)
 
+                # (Optional) Add a small delay if necessary to let GitHub update
+                # import time
+                # time.sleep(1)
                 # Re-open connection to re-query the updated grade
                 conn = sqlite3.connect(db_path)
                 cursor = conn.cursor()
