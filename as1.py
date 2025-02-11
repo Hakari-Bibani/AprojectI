@@ -192,7 +192,7 @@ def show():
 
                 st.info("Grade updated locally. Preparing to push changes to GitHub...")
 
-                # Optional: short delay to ensure the local DB file is fully written to disk
+                # Short delay to ensure all writes are flushed to disk
                 time.sleep(1)
 
                 # (Optional Debug) Verify the updated grade from the local file
