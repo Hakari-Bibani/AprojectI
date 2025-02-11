@@ -7,6 +7,7 @@ from io import StringIO
 from streamlit_folium import st_folium
 from utils.style1 import set_page_style
 import sqlite3
+import time
 from github_sync import push_db_to_github, pull_db_from_github
 
 def show():
@@ -34,7 +35,7 @@ def show():
     st.title("Assignment 1: Mapping Coordinates and Calculating Distances")
 
     # ─────────────────────────────────────────────────────────────────
-    # STEP 1: ENTER YOUR USERNAME (no password required)
+    # STEP 1: ENTER YOUR USERNAME (only username, no password)
     # ─────────────────────────────────────────────────────────────────
     st.markdown('<h1 style="color: #ADD8E6;">Step 1: Enter Your Username</h1>', unsafe_allow_html=True)
     username_input = st.text_input("Username", key="as1_username")
@@ -171,8 +172,7 @@ def show():
                 st.dataframe(st.session_state["dataframe_object"])
 
         # ─────────────────────────────────────────────────────────────────
-        # SUBMIT CODE BUTTON 
-        # (Users can resubmit at any time; the new grade is saved under as1 in GitHub)
+        # SUBMIT CODE BUTTON (users can resubmit anytime; the new grade is saved under as1 on GitHub)
         # ─────────────────────────────────────────────────────────────────
         submit_button = st.button("Submit Code", key="submit_code_button")
         if submit_button:
@@ -190,7 +190,18 @@ def show():
                 conn.commit()
                 conn.close()
 
-                st.info("Grade updated locally. Pushing changes to GitHub...")
+                st.info("Grade updated locally. Preparing to push changes to GitHub...")
+
+                # Optional: short delay to ensure the local DB file is fully written to disk
+                time.sleep(1)
+
+                # (Optional Debug) Verify the updated grade from the local file
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                cursor.execute("SELECT as1 FROM users WHERE username = ?", (st.session_state["username"],))
+                current_grade = cursor.fetchone()[0]
+                conn.close()
+                st.write("Local grade now is:", current_grade)
 
                 # Push the updated DB to GitHub
                 push_db_to_github(db_path)
