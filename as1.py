@@ -7,7 +7,6 @@ from streamlit_folium import st_folium
 from utils.style1 import set_page_style
 import sqlite3
 from github_sync import push_db_to_github, pull_db_from_github
-import time
 
 def show():
     # Apply the custom page style
@@ -192,9 +191,6 @@ def show():
                 conn.commit()
                 conn.close()
 
-                # Small delay to ensure the file is fully written to disk
-                time.sleep(1)
-                
                 st.info("Grade updated locally. Pushing changes to GitHub...")
 
                 # Push the updated DB to GitHub
