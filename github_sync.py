@@ -1,6 +1,7 @@
 import requests
 import base64
 import streamlit as st
+import time
 
 def pull_db_from_github(db_file: str):
     """
@@ -56,14 +57,16 @@ def push_db_to_github(db_file: str):
         return
 
     encoded_content = base64.b64encode(content).decode("utf-8")
-    url = f"https://api.github.com/repos/{repo}/contents/{db_file}"
+    # Use a cache buster to ensure a fresh GET for the SHA
+    cache_buster = str(int(time.time()))
+    url = f"https://api.github.com/repos/{repo}/contents/{db_file}?t={cache_buster}"
     headers = {
         "Authorization": f"token {token}",
         "Accept": "application/vnd.github.v3+json"
     }
 
     try:
-        # Get the current file's SHA if it exists
+        # Get the current file's SHA (with cache busting)
         get_response = requests.get(url, headers=headers)
         if get_response.status_code == 200:
             get_data = get_response.json()
