@@ -1,15 +1,17 @@
-# database.py
 import sqlite3
 import streamlit as st
-from github_sync import pull_db_from_github
 
 def create_tables():
     """Create the required table in the database if it doesn't exist."""
     db_path = st.secrets["general"]["db_path"]
-
-    # Pull the DB from GitHub to ensure the local version is updated
-    pull_db_from_github(db_path)
-
+    
+    # Pull the DB from GitHub at runtime (wrapped in try/except to avoid app crash)
+    try:
+        from github_sync import pull_db_from_github
+        pull_db_from_github(db_path)
+    except Exception as e:
+        print(f"Error pulling DB from GitHub: {e}")
+    
     # Now proceed with table creation (only one table: users)
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
