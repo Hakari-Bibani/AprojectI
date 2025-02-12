@@ -3,40 +3,6 @@ import base64
 import streamlit as st
 import time
 
-def pull_db_from_github(db_file: str):
-    """
-    Pull the remote SQLite DB file from GitHub
-    and overwrite the local db_file if found.
-    """
-    try:
-        repo = st.secrets["general"]["repo"]
-        token = st.secrets["general"]["token"]
-    except Exception as e:
-        print(f"Secrets not found or misconfigured: {e}")
-        return
-
-    url = f"https://api.github.com/repos/{repo}/contents/{db_file}"
-    headers = {
-        "Authorization": f"token {token}",
-        "Accept": "application/vnd.github.v3+json"
-    }
-
-    try:
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            content = response.json().get("content", "")
-            if content:
-                decoded = base64.b64decode(content)
-                with open(db_file, "wb") as f:
-                    f.write(decoded)
-                print(f"Pulled latest {db_file} from GitHub.")
-            else:
-                print(f"No content found in {db_file} on GitHub.")
-        else:
-            print(f"Could not find {db_file} in the GitHub repo. Using local copy if exists.")
-    except Exception as e:
-        print(f"Error in pull_db_from_github: {e}")
-
 def push_db_to_github(db_file: str):
     """
     Pushes the local SQLite DB file to GitHub.
@@ -58,10 +24,10 @@ def push_db_to_github(db_file: str):
 
     encoded_content = base64.b64encode(content).decode("utf-8")
     
-    # Define the base URL without any query parameters (this is what GitHub expects)
+    # Define the base URL (without query parameters) as required by GitHub.
     url_base = f"https://api.github.com/repos/{repo}/contents/{db_file}"
     
-    # Use a cache buster only when getting the SHA
+    # Use a cache buster only when GETting the SHA to force a fresh lookup.
     cache_buster = str(int(time.time()))
     get_url = url_base + f"?t={cache_buster}"
     
@@ -69,9 +35,9 @@ def push_db_to_github(db_file: str):
         "Authorization": f"token {token}",
         "Accept": "application/vnd.github.v3+json"
     }
-
+    
     try:
-        # Get the current file's SHA using the cache-busted URL
+        # GET the current file's SHA using the cache-busted URL.
         get_response = requests.get(get_url, headers=headers)
         if get_response.status_code == 200:
             get_data = get_response.json()
@@ -79,18 +45,23 @@ def push_db_to_github(db_file: str):
         else:
             sha = None
 
+        # Use a unique commit message each time (append a timestamp).
+        commit_message = f"Update mydatabase.db at {int(time.time())}"
         data = {
-            "message": "Update mydatabase.db",
+            "message": commit_message,
             "content": encoded_content
         }
         if sha:
             data["sha"] = sha
 
-        # Use the plain URL (without the cache buster) for the PUT request
+        # For the PUT request, use the clean URL (no query parameter).
         put_response = requests.put(url_base, json=data, headers=headers)
+        response_json = put_response.json()
+        print("PUT response status:", put_response.status_code)
+        print("PUT response JSON:", response_json)
         if put_response.status_code in [200, 201]:
             print("Database pushed to GitHub successfully.")
         else:
-            print("Error pushing DB to GitHub:", put_response.json())
+            print("Error pushing DB to GitHub:", response_json)
     except Exception as e:
         print(f"Error in push_db_to_github: {e}")
