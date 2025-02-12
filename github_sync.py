@@ -57,17 +57,22 @@ def push_db_to_github(db_file: str):
         return
 
     encoded_content = base64.b64encode(content).decode("utf-8")
-    # Use a cache buster to ensure a fresh GET for the SHA
+    
+    # Define the base URL without any query parameters (this is what GitHub expects)
+    url_base = f"https://api.github.com/repos/{repo}/contents/{db_file}"
+    
+    # Use a cache buster only when getting the SHA
     cache_buster = str(int(time.time()))
-    url = f"https://api.github.com/repos/{repo}/contents/{db_file}?t={cache_buster}"
+    get_url = url_base + f"?t={cache_buster}"
+    
     headers = {
         "Authorization": f"token {token}",
         "Accept": "application/vnd.github.v3+json"
     }
 
     try:
-        # Get the current file's SHA (with cache busting)
-        get_response = requests.get(url, headers=headers)
+        # Get the current file's SHA using the cache-busted URL
+        get_response = requests.get(get_url, headers=headers)
         if get_response.status_code == 200:
             get_data = get_response.json()
             sha = get_data.get("sha", None)
@@ -81,7 +86,8 @@ def push_db_to_github(db_file: str):
         if sha:
             data["sha"] = sha
 
-        put_response = requests.put(url, json=data, headers=headers)
+        # Use the plain URL (without the cache buster) for the PUT request
+        put_response = requests.put(url_base, json=data, headers=headers)
         if put_response.status_code in [200, 201]:
             print("Database pushed to GitHub successfully.")
         else:
