@@ -6,13 +6,11 @@ import time
 
 def pull_db_from_github(db_file: str):
     """
-    Pull the remote SQLite DB file from GitHub
-    and overwrite the local db_file if found.
+    Pull the remote SQLite DB file from GitHub and overwrite the local file.
     """
     repo = st.secrets["general"]["repo"]
     token = st.secrets["general"]["token"]
     branch = st.secrets["general"].get("branch", "main")
-    # Use no-cache headers so we get the latest content
     url = f"https://api.github.com/repos/{repo}/contents/{db_file}?ref={branch}"
     headers = {
         "Authorization": f"token {token}",
@@ -36,14 +34,12 @@ def pull_db_from_github(db_file: str):
 
 def push_db_to_github(db_file: str):
     """
-    Pushes the local SQLite DB file to GitHub.
-    Overwrites the existing file if it exists.
+    Push the local SQLite DB file to GitHub.
     """
     repo = st.secrets["general"]["repo"]
     token = st.secrets["general"]["token"]
     branch = st.secrets["general"].get("branch", "main")
     
-    # Read the local database file and encode it in base64
     try:
         with open(db_file, "rb") as f:
             content = f.read()
@@ -54,7 +50,6 @@ def push_db_to_github(db_file: str):
     encoded_content = base64.b64encode(content).decode("utf-8")
     
     url = f"https://api.github.com/repos/{repo}/contents/{db_file}"
-    # Add no-cache headers to force a fresh GET
     headers = {
         "Authorization": f"token {token}",
         "Accept": "application/vnd.github.v3+json",
@@ -62,7 +57,7 @@ def push_db_to_github(db_file: str):
         "Pragma": "no-cache"
     }
     
-    # Add a unique query parameter to bypass any caching issues
+    # Append a unique query parameter to force a fresh GET
     get_url = f"{url}?ref={branch}&_={int(time.time())}"
     get_response = requests.get(get_url, headers=headers)
     try:
@@ -73,7 +68,6 @@ def push_db_to_github(db_file: str):
     sha = get_data.get("sha", None)
     print("Existing file SHA:", sha)
     
-    # Prepare the data payload for the PUT request
     data = {
         "message": "Update database file with new assignment grade",
         "content": encoded_content,
@@ -82,7 +76,6 @@ def push_db_to_github(db_file: str):
     if sha:
         data["sha"] = sha
 
-    # Execute the PUT request to update the file on GitHub
     put_response = requests.put(url, json=data, headers=headers)
     print("PUT response status:", put_response.status_code)
     print("PUT response text:", put_response.text)
