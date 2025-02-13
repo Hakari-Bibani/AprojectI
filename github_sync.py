@@ -6,15 +6,15 @@ import os
 
 def push_db_to_github(db_file: str):
     """
-    Pushes the local SQLite DB file to GitHub.
+    Pushes the local SQLite database file to GitHub.
     
     Steps:
-    1. Checks and logs file stats.
-    2. Reads the file content and encodes it in base64.
-    3. Retrieves the current file SHA (if the file exists on GitHub).
-    4. Commits the updated file to GitHub via the API.
+      1. Logs file stats to confirm the file has been updated.
+      2. Reads the file, encodes it in base64.
+      3. Retrieves the current SHA of the file on GitHub (if it exists).
+      4. Uses the GitHub API to push the updated file.
     """
-    # Verify file stats (size and modified time)
+    # Log local file stats (size and modification time)
     try:
         file_stat = os.stat(db_file)
         st.info(f"Local DB file: {db_file} | Size: {file_stat.st_size} bytes | Modified: {time.ctime(file_stat.st_mtime)}")
@@ -22,7 +22,7 @@ def push_db_to_github(db_file: str):
         st.error(f"Error retrieving file stats for {db_file}: {e}")
         return
 
-    # Get repository details from st.secrets
+    # Retrieve GitHub repository details from st.secrets
     try:
         repo = st.secrets["general"]["repo"]
         token = st.secrets["general"]["token"]
@@ -30,7 +30,7 @@ def push_db_to_github(db_file: str):
         st.error(f"Secrets not found or misconfigured: {e}")
         return
 
-    # Read the local database file
+    # Read the updated local database file
     try:
         with open(db_file, "rb") as f:
             content = f.read()
@@ -41,14 +41,14 @@ def push_db_to_github(db_file: str):
     # Encode the file content in base64 for the GitHub API
     encoded_content = base64.b64encode(content).decode("utf-8")
 
-    # Construct the GitHub API URL for the file (ensure db_file path is correct)
+    # Construct the GitHub API URL for the file (ensure the db_file path is correct)
     url = f"https://api.github.com/repos/{repo}/contents/{db_file}"
     headers = {
         "Authorization": f"token {token}",
         "Accept": "application/vnd.github.v3+json"
     }
 
-    # Retrieve the current SHA of the file if it exists on GitHub
+    # Retrieve the current SHA of the file from GitHub (if it exists)
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         try:
@@ -58,8 +58,8 @@ def push_db_to_github(db_file: str):
             st.error(f"Error parsing GitHub response: {e}")
             sha = None
     else:
-        # File does not exist on GitHub yet
         sha = None
+        st.info("File not found on GitHub; it will be created.")
 
     # Prepare commit data with a unique commit message using a timestamp
     commit_message = f"Update {db_file} at {int(time.time())}"
@@ -70,7 +70,7 @@ def push_db_to_github(db_file: str):
     if sha:
         data["sha"] = sha
 
-    # Wait briefly to ensure the file system has flushed any recent changes
+    # Wait briefly to ensure all local changes are flushed to disk
     time.sleep(1)
     
     # Perform the PUT request to push the updated file to GitHub
@@ -84,14 +84,14 @@ def push_db_to_github(db_file: str):
 
 def pull_db_from_github(db_file: str):
     """
-    Pulls the latest version of the SQLite DB file from GitHub and writes it locally.
+    Pulls the latest version of the SQLite database file from GitHub and writes it locally.
     
     Steps:
-    1. Retrieves the file content from GitHub via the API.
-    2. Decodes the base64 content.
-    3. Writes the content to the local file.
+      1. Retrieves the file content from GitHub.
+      2. Decodes the base64 content.
+      3. Writes the content to the local file.
     """
-    # Get repository details from st.secrets
+    # Retrieve GitHub repository details from st.secrets
     try:
         repo = st.secrets["general"]["repo"]
         token = st.secrets["general"]["token"]
@@ -110,9 +110,7 @@ def pull_db_from_github(db_file: str):
     if response.status_code == 200:
         try:
             data = response.json()
-            # Decode the base64 content
             file_content = base64.b64decode(data["content"])
-            # Write the updated content back to the local file
             with open(db_file, "wb") as f:
                 f.write(file_content)
             st.info("Database pulled from GitHub successfully.")
