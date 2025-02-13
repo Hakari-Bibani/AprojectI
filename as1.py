@@ -214,9 +214,12 @@ def show():
                 conn = sqlite3.connect(db_path)
                 cursor = conn.cursor()
                 cursor.execute("SELECT as1 FROM records WHERE username = ?", (st.session_state["username"],))
-                new_grade = cursor.fetchone()[0]
+                new_grade = cursor.fetchone()
+                if new_grade is not None:
+                    new_grade = new_grade[0]
+                    st.success(f"Submission successful! Your grade: {new_grade}/100")
+                else:
+                    st.error("Failed to retrieve the updated grade. Please try again.")
                 conn.close()
-
-                st.success(f"Submission successful! Your grade: {new_grade}/100")
             else:
                 st.error("Please enter your username to submit.")
