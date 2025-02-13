@@ -6,6 +6,7 @@ from io import StringIO
 from streamlit_folium import st_folium
 from utils.style1 import set_page_style
 import sqlite3
+# Modified import: also import pull_db_from_github to update the local DB before grading.
 from github_sync import push_db_to_github, pull_db_from_github
 
 def show():
@@ -39,6 +40,7 @@ def show():
     username_input = st.text_input("Username", key="as1_username")
     enter_username = st.button("Enter")
     if enter_username and username_input:
+        # (Optional: pull the latest DB before checking username if needed)
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users WHERE username = ?", (username_input,))
@@ -46,6 +48,13 @@ def show():
         if user_record:
             st.session_state["username_entered"] = True
             st.session_state["username"] = username_input
+
+            # Copy username and fullname to the records table if not already present
+            cursor.execute("SELECT * FROM records WHERE username = ?", (username_input,))
+            record_exists = cursor.fetchone()
+            if not record_exists:
+                cursor.execute("INSERT INTO records (username, fullname) VALUES (?, ?)", (username_input, user_record[0]))
+                conn.commit()
         else:
             st.error("Invalid username. Please enter a registered username.")
             st.session_state["username_entered"] = False
@@ -170,7 +179,8 @@ def show():
                 st.dataframe(st.session_state["dataframe_object"])
 
         # ─────────────────────────────────────────────────────────────────
-        # SUBMIT CODE BUTTON (each submission overwrites the previous grade)
+        # SUBMIT CODE BUTTON (updates grade and pushes DB)
+        # Resubmission is allowed – each submission overwrites the previous grade in the database.
         # ─────────────────────────────────────────────────────────────────
         submit_button = st.button("Submit Code", key="submit_code_button")
         if submit_button:
@@ -181,13 +191,13 @@ def show():
                 from grades.grade1 import grade_assignment
                 grade = grade_assignment(code_input)
 
-                # Pull the latest DB from GitHub before updating
+                # Pull the latest DB from GitHub before updating, ensuring the local copy is current.
                 pull_db_from_github(db_path)
                 
-                # Update the grade in the users table for this username (resubmission allowed)
+                # Update the grade in the records table for this username (resubmission allowed)
                 conn = sqlite3.connect(db_path)
                 cursor = conn.cursor()
-                cursor.execute("UPDATE users SET as1 = ? WHERE username = ?", (grade, st.session_state["username"]))
+                cursor.execute("UPDATE records SET as1 = ? WHERE username = ?", (grade, st.session_state["username"]))
                 conn.commit()
                 conn.close()
 
@@ -196,13 +206,17 @@ def show():
                 # Push the updated DB to GitHub
                 push_db_to_github(db_path)
 
+                # (Optional) Add a small delay if necessary to let GitHub update
+                # import time
+                # time.sleep(1)
+
                 # Re-open connection to re-query the updated grade
                 conn = sqlite3.connect(db_path)
                 cursor = conn.cursor()
-                cursor.execute("SELECT as1 FROM users WHERE username = ?", (st.session_state["username"],))
+                cursor.execute("SELECT as1 FROM records WHERE username = ?", (st.session_state["username"],))
                 new_grade = cursor.fetchone()[0]
                 conn.close()
 
                 st.success(f"Submission successful! Your grade: {new_grade}/100")
             else:
-                st.error("Please enter your username to submit.")
+                st.error("Please enter your username to submit.") 
