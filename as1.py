@@ -219,4 +219,4 @@ def show():
 
                 st.success(f"Submission successful! Your grade: {new_grade}/100")
             else:
-                st.error("Please enter your username to submit.") 
+                st.error("Please enter your username to submit.")
