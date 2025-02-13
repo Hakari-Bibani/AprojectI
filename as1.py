@@ -75,10 +75,20 @@ def show():
                - Point 1 and Point 3.
 
             **Coordinates:**
-            - Point 1: Latitude: 36.325735, Longitude: 43.928414
-            - Point 2: Latitude: 36.393432, Longitude: 44.586781
-            - Point 3: Latitude: 36.660477, Longitude: 43.840174
-                """)
+        - Point 1: Latitude: 36.325735, Longitude: 43.928414
+        - Point 2: Latitude: 36.393432, Longitude: 44.586781
+        - Point 3: Latitude: 36.660477, Longitude: 43.840174
+        **Python Libraries You Will Use:**
+        - `geopy` for calculating the distance between two coordinates.
+        - `folium` for plotting the points on an interactive map.
+        - `pandas` to create a DataFrame that displays the distances between the points.
+        **Expected Output:**
+        1. A map showing the three coordinates.
+        2. A text summary (express values to two decimal places) showing the calculated distances (in kilometers) between:
+           - Point 1 and Point 2.
+           - Point 2 and Point 3.
+           - Point 1 and Point 3.
+        """)
 
         with tab2:
             st.markdown("""
