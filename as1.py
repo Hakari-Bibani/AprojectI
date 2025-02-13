@@ -98,7 +98,22 @@ def show():
             - **Distance Calculations:** 30 points
             """)
             with st.expander("See More"):
-                st.markdown("Additional grading details...")
+        st.markdown("""
+        #### 2. Map Visualization (40 points)
+        - **Map Generation (15 points):**
+            - Checks if the `folium.Map` is correctly initialized.
+        - **Markers (15 points):**
+            - Checks if markers are added to the map for each coordinate.
+        - **Polylines (5 points):**
+            - Checks if polylines are used to connect the points.
+        - **Popups (5 points):**
+            - Checks if popups are added to the markers.
+        #### 3. Distance Calculations (30 points)
+        - **Geodesic Implementation (10 points):**
+            - Checks if the `geodesic` function is used correctly to calculate distances.
+        - **Distance Accuracy (20 points):**
+            - Checks if the calculated distances are accurate within a 100-meter tolerance.
+        """)
 
         # ──────────────────────────────────────────────────────────────
         # Step 3: Run and Submit Your Code
