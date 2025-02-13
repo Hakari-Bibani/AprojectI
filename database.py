@@ -2,17 +2,14 @@ import sqlite3
 import streamlit as st
 
 def create_tables():
-    # Get the database path from st.secrets (should be "mydatabase.db")
     db_path = st.secrets["general"]["db_path"]
 
-    # Optionally pull the latest DB from GitHub if you're using github_sync.py
     try:
         from github_sync import pull_db_from_github
         pull_db_from_github(db_path)
     except Exception as e:
         st.error(f"Error pulling DB from GitHub: {e}")
 
-    # Connect to the database (or create it if it doesn't exist)
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
@@ -28,7 +25,7 @@ def create_tables():
     )
     ''')
 
-    # Create the records table with a UNIQUE constraint on username
+    # Create the records table with UNIQUE constraint
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS records (
         username TEXT UNIQUE,
@@ -52,7 +49,6 @@ def create_tables():
     ''')
 
     # Create a trigger to insert into records table when a new user is added
-    # Using INSERT OR IGNORE to prevent duplicates if the record already exists.
     cursor.execute('''
     CREATE TRIGGER IF NOT EXISTS after_user_insert
     AFTER INSERT ON users
@@ -64,8 +60,8 @@ def create_tables():
 
     conn.commit()
     conn.close()
-
-    st.info("Database created/updated successfully.")
+    # The following line has been removed:
+    # st.info("Database created/updated successfully.")
 
 if __name__ == "__main__":
     create_tables()
