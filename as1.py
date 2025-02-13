@@ -59,17 +59,17 @@ def show():
         tab1, tab2 = st.tabs(["Assignment Details", "Grading Details"])
 
         with tab1:
-    st.markdown("""
-    ### Objective
-    In this assignment, you will write a Python script to plot three geographical coordinates on a map and calculate the distance between each pair of points in kilometers. This will help you practice working with geospatial data and Python libraries for mapping and calculations.
+          st.markdown("""
+         ### Objective
+          In this assignment, you will write a Python script to plot three geographical coordinates on a map and calculate the distance between each pair of points in kilometers. This will help you practice working with geospatial data and Python libraries for mapping and calculations.
     
-    ### Assignment: Week 1 – Mapping Coordinates and Calculating Distances in Python
-    **Objective:**
-    In this assignment, you will write a Python script to plot three geographical coordinates on a map and calculate the distance between each pair of points in kilometers. This will help you practice working with geospatial data and Python libraries for mapping and calculations.
-    """)
-    with st.expander("See More"):
-        st.markdown("""
-        **Task Requirements:**
+         ### Assignment: Week 1 – Mapping Coordinates and Calculating Distances in Python
+         **Objective:**
+         In this assignment, you will write a Python script to plot three geographical coordinates on a map and calculate the distance between each pair of points in kilometers. This will help you practice working with geospatial data and Python libraries for mapping and calculations.
+          """)
+        with st.expander("See More"):
+         st.markdown("""
+         **Task Requirements:**
         1. **Plot the Three Coordinates on a Map:**
            - The coordinates represent three locations in the Kurdistan Region.
            - You will use Python libraries to plot these points on a map.
