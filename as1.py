@@ -159,7 +159,7 @@ def show():
         # ─────────────────────────────────────────────────────────────────
         st.markdown('<h1 style="color: #ADD8E6;">Step 3: Run and Submit Your Code</h1>', unsafe_allow_html=True)
         st.markdown('<p style="color: white;">📝 Paste Your Code Here</p>', unsafe_allow_html=True)
-        code_input = st.text_area("", height=300)  # Removed label since we're using custom markdown above
+        code_input = st.text_area("", height=300)
 
         # Run Code Button
         run_button = st.button("Run Code", key="run_code_button")
@@ -202,17 +202,16 @@ def show():
         if st.session_state["run_success"]:
             st.markdown('<h3 style="color: white;">📄 Captured Output</h3>', unsafe_allow_html=True)
             if st.session_state["captured_output"]:
-                # Format the output with preserved whitespace and line breaks
                 formatted_output = st.session_state["captured_output"].replace('\n', '<br>')
                 st.markdown(f'<pre style="color: white; white-space: pre-wrap; word-wrap: break-word;">{formatted_output}</pre>', unsafe_allow_html=True)
             else:
                 st.markdown('<p style="color: white;">No text output captured.</p>', unsafe_allow_html=True)
 
             if st.session_state["map_object"]:
-                st.markdown("### 🗘️ Map Output")
-                st_folium(st.session_state["map_object"], width=700, height=500)
-                st.markdown("### 🗺️ Map Output")
-                st_folium(st.session_state["map_object"], width=1000, height=500)
+                st.markdown("### 🗘️ Map Output (Small)")
+                st_folium(st.session_state["map_object"], width=700, height=500, key="map_small")
+                st.markdown("### 🗺️ Map Output (Large)")
+                st_folium(st.session_state["map_object"], width=1000, height=500, key="map_large")
 
             if st.session_state["dataframe_object"] is not None:
                 st.markdown("### 📊 DataFrame Output")
@@ -224,7 +223,6 @@ def show():
             if not st.session_state.get("run_success", False):
                 st.error("Please run your code successfully before submitting.")
             else:
-                # Grade the submission
                 from grades.grade1 import grade_assignment
                 grade = grade_assignment(code_input)
 
