@@ -97,8 +97,24 @@ def show():
             - **Map Visualization:** 40 points
             - **Distance Calculations:** 30 points
             """)
-            with st.expander("See More"):
-        st.markdown("""
+            st.markdown("""
+        ### Detailed Grading Breakdown
+        #### 1. Code Structure and Implementation (30 points)
+        - **Library Imports (5 points):**
+            - Checks if the required libraries (`folium`, `geopy`, `geodesic`) are imported.
+        - **Coordinate Handling (5 points):**
+            - Checks if the correct coordinates are defined in the code.
+        - **Code Execution (10 points):**
+            - Checks if the code runs without errors.
+        - **Code Quality (10 points):**
+            - **Variable Naming:** 2 points (deducted if single-letter variables are used).
+            - **Spacing:** 2 points (deducted if improper spacing is found, e.g., no space after `=`).
+            - **Comments:** 2 points (deducted if no comments are present).
+            - **Code Organization:** 2 points (deducted if no blank lines are used for separation).
+        """)
+        # Add "See More" expandable section
+        with st.expander("See More"):
+            st.markdown("""
         #### 2. Map Visualization (40 points)
         - **Map Generation (15 points):**
             - Checks if the `folium.Map` is correctly initialized.
