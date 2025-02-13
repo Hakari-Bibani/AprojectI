@@ -1,51 +1,62 @@
-import sqlite3
-import time
+import requests
+import base64
 import streamlit as st
-from github_sync import push_db_to_github
+import os
 
-def update_grade_and_push(db_path, username, new_grade):
+def pull_db_from_github(db_file: str):
     """
-    Update the grade in the records table and push the updated DB file to GitHub.
+    Pull the remote SQLite DB file from GitHub
+    and overwrite the local db_file if found.
     """
-    # Open a connection to the local database
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
+    repo = st.secrets["general"]["repo"]
+    token = st.secrets["general"]["token"]
+    url = f"https://api.github.com/repos/{repo}/contents/{db_file}"
+    headers = {
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github.v3+json"
+    }
 
-    # Verify that the record exists by checking the current grade
-    cursor.execute("SELECT as1 FROM records WHERE username = ?", (username,))
-    row = cursor.fetchone()
-    if row is None:
-        st.error(f"No record found for username '{username}'.")
-        conn.close()
-        return
-
-    # Update the grade in the records table
-    cursor.execute("UPDATE records SET as1 = ? WHERE username = ?", (new_grade, username))
-    conn.commit()
-
-    # Verify the update
-    cursor.execute("SELECT as1 FROM records WHERE username = ?", (username,))
-    updated = cursor.fetchone()
-    conn.close()
-
-    if updated:
-        st.info(f"Local grade for {username} after update: {updated[0]}")
+    response = requests.get(url, headers=headers)
+    
+    if response.status_code == 200:
+        content = response.json().get("content", "")
+        if content:
+            decoded = base64.b64decode(content)
+            with open(db_file, "wb") as f:
+                f.write(decoded)
+            print(f"Pulled latest {db_file} from GitHub.")
+        else:
+            print(f"No content found in {db_file} on GitHub.")
     else:
-        st.error("Local update failed!")
-        return
+        print(f"Could not find {db_file} in the GitHub repo. Using local copy if exists.")
 
-    # Wait briefly to ensure changes are flushed to disk
-    time.sleep(1)
-
-    # Push the updated database file to GitHub
-    push_db_to_github(db_path)
-
-# Example usage (for instance, in your submission handler):
-db_path = st.secrets["general"]["db_path"]  # e.g., "mydatabase.db"
-username = st.session_state.get("username", "").strip()  # ensure no extra spaces
-new_grade = 98.0  # Replace with your calculated grade
-
-if username:
-    update_grade_and_push(db_path, username, new_grade)
-else:
-    st.error("Username not provided. Cannot update grade.")
+def push_db_to_github(db_file: str):
+    """
+    Pushes the local SQLite DB file to GitHub.
+    Overwrites the existing file if it exists.
+    """
+    repo = st.secrets["general"]["repo"]
+    token = st.secrets["general"]["token"]
+    
+    with open(db_file, "rb") as f:
+        content = f.read()
+    encoded_content = base64.b64encode(content).decode("utf-8")
+    
+    url = f"https://api.github.com/repos/{repo}/contents/{db_file}"
+    headers = {
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+    
+    get_response = requests.get(url, headers=headers)
+    sha = get_response.json()["sha"] if get_response.status_code == 200 else None
+    
+    data = {"message": "Update mydatabase.db", "content": encoded_content}
+    if sha:
+        data["sha"] = sha
+    
+    put_response = requests.put(url, json=data, headers=headers)
+    if put_response.status_code in [200, 201]:
+        print("Database pushed to GitHub successfully.")
+    else:
+        print("Error pushing DB to GitHub:", put_response.json())
