@@ -2,19 +2,21 @@ import sqlite3
 import streamlit as st
 
 def create_tables():
-    db_path = st.secrets["general"]["db_path"]  # Ensure this is set to 'mydatabase.db' if that's what you're using.
+    # Get the database path from st.secrets (should be "mydatabase.db")
+    db_path = st.secrets["general"]["db_path"]
 
-    # Pull the DB from GitHub at runtime (if applicable)
+    # Optionally pull the latest DB from GitHub if you're using github_sync.py
     try:
         from github_sync import pull_db_from_github
         pull_db_from_github(db_path)
     except Exception as e:
-        print(f"Error pulling DB from GitHub: {e}")
+        st.error(f"Error pulling DB from GitHub: {e}")
 
+    # Connect to the database (or create it if it doesn't exist)
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # Create the users table
+    # Create the users table (unchanged)
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS users (
         fullname TEXT,
@@ -26,10 +28,10 @@ def create_tables():
     )
     ''')
 
-    # Create the records table
+    # Create the records table with a UNIQUE constraint on username
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS records (
-        username TEXT,
+        username TEXT UNIQUE,
         fullname TEXT,
         as1 REAL DEFAULT 0,
         as2 REAL DEFAULT 0,
@@ -41,7 +43,7 @@ def create_tables():
     )
     ''')
 
-    # Create the tracks table
+    # Create the tracks table (unchanged)
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS tracks (
         username TEXT,
@@ -50,14 +52,20 @@ def create_tables():
     ''')
 
     # Create a trigger to insert into records table when a new user is added
+    # Using INSERT OR IGNORE to prevent duplicates if the record already exists.
     cursor.execute('''
     CREATE TRIGGER IF NOT EXISTS after_user_insert
     AFTER INSERT ON users
     FOR EACH ROW
     BEGIN
-        INSERT INTO records (username, fullname) VALUES (NEW.username, NEW.fullname);
+        INSERT OR IGNORE INTO records (username, fullname) VALUES (NEW.username, NEW.fullname);
     END;
     ''')
 
     conn.commit()
     conn.close()
+
+    st.info("Database created/updated successfully.")
+
+if __name__ == "__main__":
+    create_tables()
