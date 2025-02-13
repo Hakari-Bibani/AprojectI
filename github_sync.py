@@ -65,3 +65,31 @@ def push_db_to_github(db_file: str):
             print("Error pushing DB to GitHub:", response_json)
     except Exception as e:
         print(f"Error in push_db_to_github: {e}")
+
+def pull_db_from_github(db_file: str):
+    """
+    Pulls the SQLite DB file from GitHub and saves it locally.
+    """
+    try:
+        repo = st.secrets["general"]["repo"]
+        token = st.secrets["general"]["token"]
+    except Exception as e:
+        print(f"Secrets not found or misconfigured: {e}")
+        return
+
+    url = f"https://api.github.com/repos/{repo}/contents/{db_file}"
+    headers = {
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github.v3.raw"
+    }
+    
+    try:
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            with open(db_file, "wb") as f:
+                f.write(response.content)
+            print("Database pulled from GitHub successfully.")
+        else:
+            print(f"Error pulling DB from GitHub: {response.status_code}")
+    except Exception as e:
+        print(f"Error in pull_db_from_github: {e}")
