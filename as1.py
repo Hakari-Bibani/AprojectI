@@ -59,22 +59,31 @@ def show():
         tab1, tab2 = st.tabs(["Assignment Details", "Grading Details"])
 
         with tab1:
-            st.markdown("""
-            ### Objective
-            In this assignment, you will write a Python script to plot three geographical coordinates on a map and calculate the distance between each pair of points in kilometers.
-            """)
-            with st.expander("See More"):
-                st.markdown("""
-            **Assignment:** Week 1 – Mapping Coordinates and Calculating Distances in Python
-
-            **Task Requirements:**
-            1. Plot three specific coordinates on an interactive map.
-            2. Calculate and display the distances (in kilometers) between:
-               - Point 1 and Point 2.
-               - Point 2 and Point 3.
-               - Point 1 and Point 3.
-
-            **Coordinates:**
+    st.markdown("""
+    ### Objective
+    In this assignment, you will write a Python script to plot three geographical coordinates on a map and calculate the distance between each pair of points in kilometers. This will help you practice working with geospatial data and Python libraries for mapping and calculations.
+    
+    ### Assignment: Week 1 – Mapping Coordinates and Calculating Distances in Python
+    **Objective:**
+    In this assignment, you will write a Python script to plot three geographical coordinates on a map and calculate the distance between each pair of points in kilometers. This will help you practice working with geospatial data and Python libraries for mapping and calculations.
+    """)
+    with st.expander("See More"):
+        st.markdown("""
+        **Task Requirements:**
+        1. **Plot the Three Coordinates on a Map:**
+           - The coordinates represent three locations in the Kurdistan Region.
+           - You will use Python libraries to plot these points on a map.
+           - The map should visually display the exact locations of the coordinates.
+        2. **Calculate the Distance Between Each Pair of Points:**
+           - You will calculate the distances between the three points in kilometers.
+           - Specifically, calculate:
+             - The distance between Point 1 and Point 2.
+             - The distance between Point 2 and Point 3.
+             - The distance between Point 1 and Point 3.
+           - Add Markers to the map for each coordinate.
+           - Add polylines to connect the points.
+           - Add popups to display information about the distance.
+        **Coordinates:**
         - Point 1: Latitude: 36.325735, Longitude: 43.928414
         - Point 2: Latitude: 36.393432, Longitude: 44.586781
         - Point 3: Latitude: 36.660477, Longitude: 43.840174
