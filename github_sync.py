@@ -7,12 +7,8 @@ import os
 def push_db_to_github(db_file: str):
     """
     Pushes the local SQLite database file to GitHub.
-    
-    Steps:
-      1. Logs file stats to confirm the file has been updated.
-      2. Reads the file, encodes it in base64.
-      3. Retrieves the current SHA of the file on GitHub (if it exists).
-      4. Uses the GitHub API to push the updated file.
+    Logs file stats, reads the file, encodes it in base64, retrieves the current SHA,
+    and uses the GitHub API to push the updated file.
     """
     # Log local file stats (size and modification time)
     try:
@@ -70,7 +66,7 @@ def push_db_to_github(db_file: str):
     if sha:
         data["sha"] = sha
 
-    # Wait briefly to ensure all local changes are flushed to disk
+    # Wait briefly to ensure the file system has flushed any recent changes
     time.sleep(1)
     
     # Perform the PUT request to push the updated file to GitHub
@@ -85,11 +81,7 @@ def push_db_to_github(db_file: str):
 def pull_db_from_github(db_file: str):
     """
     Pulls the latest version of the SQLite database file from GitHub and writes it locally.
-    
-    Steps:
-      1. Retrieves the file content from GitHub.
-      2. Decodes the base64 content.
-      3. Writes the content to the local file.
+    Retrieves the file content from GitHub, decodes it, and writes it to the local file.
     """
     # Retrieve GitHub repository details from st.secrets
     try:
